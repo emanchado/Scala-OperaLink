@@ -16,6 +16,14 @@ package org.demiurgo.operalink {
       return Http.postData(serverBaseUrl + path, data).
                 oauth(consumer, accessToken).asString
     }
+
+    def post(path: String, params: Map[String, String]): String = {
+      var request = Http.post(serverBaseUrl + path)
+      for ((key,value) <- params) {
+        request = request.param(key, value)
+      }
+      return request.oauth(consumer, accessToken).asString
+    }
   }
 
   class TestLinkServerProxy(consumer: Token, accessToken: Token,
@@ -36,25 +44,35 @@ package org.demiurgo.operalink {
     }
 
     override def post(path: String, data: String): String = {
-      return cannedResponse("post")
+      return cannedResponse("postdata")
+    }
+
+    override def post(path: String, params: Map[String, String]): String = {
+      return cannedResponse("postparams")
     }
   }
 
-  class LinkAPIItem {
-  }
-
-  class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem {
+  abstract class LinkAPIItem(propertySet: JSONObject) {
     val propertyHash = propertySet.obj("properties").asInstanceOf[JSONObject].obj.asInstanceOf[Map[String, String]]
     val baseHash = propertySet.obj.asInstanceOf[Map[String, String]]
-    println("Creating a new SpeedDialSlot")
 
     def id: String = baseHash("id")
+    def propertyList: Array[String]
+  }
+
+  class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+    println("Creating a new SpeedDialSlot")
+
     def position: String = id
+    def propertyList: Array[String] = {
+      return Array("uri", "title", "reload_interval", "reload_enabled",
+                   "reload_only_if_expired")
+    }
     def uri: String = propertyHash("uri")
     def title: String = propertyHash("title")
-    def reload_interval: String = propertyHash("reload_interval")
-    def reload_enabled: String = propertyHash("reload_enabled")
-    def reload_only_if_expired: String = propertyHash("reload_only_if_expired")
+    def reloadInterval: String = propertyHash("reload_interval")
+    def reloadEnabled: String = propertyHash("reload_enabled")
+    def reloadOnlyIfExpired: String = propertyHash("reload_only_if_expired")
   }
 
   class LinkAPI(val consumer: Token, val accessToken: Token) {
@@ -64,6 +82,12 @@ package org.demiurgo.operalink {
       val json = serverProxy.get("/rest/speeddial/children")
       return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
              yield new SpeedDialSlot(item.asInstanceOf[JSONObject])
+    }
+
+    def createSpeedDial(position: Int,
+                        properties: Map[String, String]): SpeedDialSlot = {
+      val json = serverProxy.post("/rest/speeddial", properties)
+      return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
   }
 }

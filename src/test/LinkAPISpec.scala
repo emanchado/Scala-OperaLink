@@ -18,6 +18,15 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
 
     speedDials(0).uri should equal("http://redir.opera.com/speeddials/portal/")
     speedDials(0).title should equal("Opera Portal beta")
-    speedDials(0).reload_enabled should equal("0")
+    speedDials(0).reloadEnabled should equal("0")
+  }
+
+  it should "correctly create a new Speed Dial" in {
+    val properties = Map[String, String](
+      "title" -> "First Speed Dial creation example",
+      "uri"   -> "http://example.com")
+    val speedDial = api.createSpeedDial(1, properties)
+    speedDial.title should equal("First Speed Dial creation example")
+    speedDial.uri should equal("http://example.com")
   }
 }
