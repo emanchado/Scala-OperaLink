@@ -27,7 +27,7 @@ package org.demiurgo.operalink {
       val c = count.get(reqType).getOrElse(0) + 1
       count(reqType) = c
       return io.Source.fromFile(fixturePath + "/" +
-                                  reqType + "-" + c + ".xml").
+                                  reqType + "-" + c + ".json").
                        mkString
     }
 
