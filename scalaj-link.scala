@@ -47,50 +47,71 @@ package org.demiurgo.operalink {
     def checkRequest(reqType: String, path: String): Boolean = {
       val expectedReqType = currentStepInfo.asInstanceOf[Map[String, String]]("method")
       val expectedPath = currentStepInfo.asInstanceOf[Map[String, String]]("path")
-      return (expectedReqType == reqType && expectedPath == path)
+      if (expectedReqType != reqType) {
+        throw new Exception("Expected request type '" + expectedReqType +
+                              "', got '" + reqType + "'")
+      }
+      if (expectedPath != path) {
+        throw new Exception("Expected URL path '" + expectedPath +
+                              "', got '" + path + "'")
+      }
+      return true;
     }
 
     def checkRequest(reqType: String, path: String, data: String): Boolean = {
       val expectedReqType = currentStepInfo.asInstanceOf[Map[String, String]]("method")
       val expectedPath = currentStepInfo.asInstanceOf[Map[String, String]]("path")
       val expectedData = currentStepInfo.asInstanceOf[Map[String, JSONObject]]("data")
-      return (expectedReqType == reqType && expectedPath == path &&
-              expectedData == data)
+      if (expectedReqType != reqType) {
+        throw new Exception("Expected request type '" + expectedReqType +
+                              "', got '" + reqType + "'")
+      }
+      if (expectedPath != path) {
+        throw new Exception("Expected URL path '" + expectedPath +
+                              "', got '" + path + "'")
+      }
+      if (expectedData != data) {
+        throw new Exception("Expected POST data '" + expectedData +
+                              "', got '" + data + "'")
+      }
+      return true;
     }
 
     def checkRequest(reqType: String, path: String, params: Map[String, String]): Boolean = {
       val expectedReqType = currentStepInfo.asInstanceOf[Map[String, String]]("method")
       val expectedPath = currentStepInfo.asInstanceOf[Map[String, String]]("path")
       val expectedParams = currentStepInfo.asInstanceOf[Map[String, JSONObject]]("params").obj.asInstanceOf[Map[String, String]]
-      return (expectedReqType == reqType && expectedPath == path &&
-              expectedParams.equals(params))
+      if (expectedReqType != reqType) {
+        throw new Exception("Expected request type '" + expectedReqType +
+                              "', got '" + reqType + "'")
+      }
+      if (expectedPath != path) {
+        throw new Exception("Expected URL path '" + expectedPath +
+                              "', got '" + path + "'")
+      }
+      if (! expectedParams.equals(params)) {
+        throw new Exception("Expected POST parameters '" + expectedParams +
+                              "', got '" + params + "'")
+      }
+      return true;
     }
 
     override def get(path: String): String = {
       count += 1
-      if (checkRequest("get", path)) {
-        return cannedResponse
-      } else {
-        return "Unexpected GET request to " + path
-      }
+      checkRequest("get", path)
+      return cannedResponse
     }
 
     override def post(path: String, data: String): String = {
       count += 1
-      if (checkRequest("post", path, data)) {
-        return cannedResponse
-      } else {
-        return "Unexpected POST request to " + path + " with data " + data
-      }
+      checkRequest("post", path, data)
+      return cannedResponse
     }
 
     override def post(path: String, params: Map[String, String]): String = {
       count += 1
-      if (checkRequest("post", path, params)) {
-        return cannedResponse
-      } else {
-        return "Unexpected POST request to " + path + " with params " + params
-      }
+      checkRequest("post", path, params)
+      return cannedResponse
     }
   }
 
