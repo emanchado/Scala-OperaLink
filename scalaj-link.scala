@@ -146,15 +146,17 @@ object ScalaJLinkTest {
     if (args.length == 2) {
       accessToken = Token(args(0), args(1))
     } else {
-      // val token = Http("https://auth.opera.com/service/oauth/request_token").param("oauth_callback","oob").oauth(consumer).asToken
+      try {
+        val token = Http("https://auth.opera.com/service/oauth/request_token").param("oauth_callback","oob").oauth(consumer).asToken
 
-      val token = Http("http://auth-test.opera.com/service/oauth/request_token").param("oauth_callback","oob").oauth(consumer).asToken
+        println("Go to https://auth.opera.com/service/oauth/authorize?oauth_token=" + token.key)
+        val verifier = Console.readLine("Enter verifier: ").trim
 
-      println("Go to https://auth.opera.com/service/oauth/authorize?oauth_token=" + token.key)
-      val verifier = Console.readLine("Enter verifier: ").trim
-
-      accessToken = Http("https://auth.opera.com/service/oauth/access_token").oauth(consumer, token, verifier).asToken
-      println("I got an access token! Namely, " + accessToken.key + " / " + accessToken.secret)
+        accessToken = Http("https://auth.opera.com/service/oauth/access_token").oauth(consumer, token, verifier).asToken
+        println("I got an access token! Namely, " + accessToken.key + " / " + accessToken.secret)
+      } catch {
+        case e: scalaj.http.HttpException => println(e.body); System.exit(1)
+      }
     }
 
     /* println(Http("https://link.api.opera.com/rest/speeddial/children/").header("content-type", "application/json").oauth(consumer, accessToken).asString) */
