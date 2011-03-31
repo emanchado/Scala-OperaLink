@@ -103,8 +103,6 @@ package org.demiurgo.operalink {
   }
 
   class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
-    println("Creating a new SpeedDialSlot")
-
     def position: String = id
     def propertyList: Array[String] = {
       return Array("uri", "title", "reload_interval", "reload_enabled",
