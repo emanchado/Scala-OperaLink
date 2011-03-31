@@ -50,4 +50,14 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     speedDial.title should equal("First Speed Dial creation example")
     speedDial.uri should equal("http://example.com")
   }
+
+  it should "correctly update an existing Speed Dial slot" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "updateSpeedDialSlot-1")
+    val properties = Map[String, String]("title" -> "New title")
+    val speedDial = api.updateSpeedDialSlot(1, properties)
+    speedDial.title should equal("New title")
+    speedDial.uri should equal("http://example.com")
+  }
 }

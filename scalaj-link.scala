@@ -155,6 +155,15 @@ package org.demiurgo.operalink {
       val json = serverProxy.post("/rest/speeddial/" + position, properties)
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
+
+    def updateSpeedDialSlot(position: Int,
+                            properties: Map[String, String]): SpeedDialSlot = {
+      val json =
+        serverProxy.post("/rest/speeddial/" + position,
+                         properties ++
+                             Map[String, String]("api_method" -> "update"))
+      return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+    }
   }
 }
 
