@@ -27,28 +27,70 @@ package org.demiurgo.operalink {
   }
 
   class TestLinkServerProxy(consumer: Token, accessToken: Token,
-                            fixturePath: String = "src/test/fixtures")
+                            fixturePath: String)
         extends LinkServerProxy(consumer, accessToken) {
-    val count = new HashMap[String, Int]
+    var count = 0
+    val baseFixturePath = "src/test/fixtures"
+    val fixtureSpecJSON =
+      io.Source.fromFile(baseFixturePath + "/" + fixturePath + ".json").
+          mkString
+    val fixtureSpec = JSON.parseRaw(fixtureSpecJSON).get.asInstanceOf[JSONArray]
 
-    def cannedResponse(reqType: String): String = {
-      val c = count.get(reqType).getOrElse(0) + 1
-      count(reqType) = c
-      return io.Source.fromFile(fixturePath + "/" +
-                                  reqType + "-" + c + ".json").
-                       mkString
+    def currentStepInfo: Map[Any, Any] = {
+      return fixtureSpec.list(count - 1).asInstanceOf[JSONObject].obj
+    }
+
+    def cannedResponse: String = {
+      return currentStepInfo.asInstanceOf[Map[String, String]]("response")
+    }
+
+    def checkRequest(reqType: String, path: String): Boolean = {
+      val expectedReqType = currentStepInfo.asInstanceOf[Map[String, String]]("method")
+      val expectedPath = currentStepInfo.asInstanceOf[Map[String, String]]("path")
+      return (expectedReqType == reqType && expectedPath == path)
+    }
+
+    def checkRequest(reqType: String, path: String, data: String): Boolean = {
+      val expectedReqType = currentStepInfo.asInstanceOf[Map[String, String]]("method")
+      val expectedPath = currentStepInfo.asInstanceOf[Map[String, String]]("path")
+      val expectedData = currentStepInfo.asInstanceOf[Map[String, JSONObject]]("data")
+      return (expectedReqType == reqType && expectedPath == path &&
+              expectedData == data)
+    }
+
+    def checkRequest(reqType: String, path: String, params: Map[String, String]): Boolean = {
+      val expectedReqType = currentStepInfo.asInstanceOf[Map[String, String]]("method")
+      val expectedPath = currentStepInfo.asInstanceOf[Map[String, String]]("path")
+      val expectedParams = currentStepInfo.asInstanceOf[Map[String, JSONObject]]("params").obj.asInstanceOf[Map[String, String]]
+      return (expectedReqType == reqType && expectedPath == path &&
+              expectedParams.equals(params))
     }
 
     override def get(path: String): String = {
-      return cannedResponse("get")
+      count += 1
+      if (checkRequest("get", path)) {
+        return cannedResponse
+      } else {
+        return "Unexpected GET request to " + path
+      }
     }
 
     override def post(path: String, data: String): String = {
-      return cannedResponse("postdata")
+      count += 1
+      if (checkRequest("post", path, data)) {
+        return cannedResponse
+      } else {
+        return "Unexpected POST request to " + path + " with data " + data
+      }
     }
 
     override def post(path: String, params: Map[String, String]): String = {
-      return cannedResponse("postparams")
+      count += 1
+      if (checkRequest("post", path, params)) {
+        return cannedResponse
+      } else {
+        return "Unexpected POST request to " + path + " with params " + params
+      }
     }
   }
 

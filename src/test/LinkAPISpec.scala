@@ -7,12 +7,12 @@ import org.demiurgo.operalink._
 class LinkAPISpec extends FlatSpec with ShouldMatchers {
   val fakeConsumer    = Token("foo", "bar")
   val fakeAccessToken = Token("foo", "bar")
-  val proxy = new TestLinkServerProxy(fakeConsumer,
-                                      fakeAccessToken)
   val api = new LinkAPI(fakeConsumer, fakeAccessToken)
-  api.serverProxy = proxy
 
   "The API object" should "correctly convert a Speed Dial slot" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getSpeedDial-1")
     val speedDials = api.getSpeedDial
     speedDials.length should equal(1)
 
@@ -22,6 +22,9 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
   }
 
   it should "correctly create a new Speed Dial" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createSpeedDial-1")
     val properties = Map[String, String](
       "title" -> "First Speed Dial creation example",
       "uri"   -> "http://example.com")

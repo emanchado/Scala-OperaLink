@@ -1,0 +1,9 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/speeddial/1",
+    "params": { "title": "First Speed Dial creation example",
+                "uri":   "http://example.com" },
+    "response": "[{\"item_type\": \"speeddial\", \"id\": \"1\", \"properties\": {\"title\": \"First Speed Dial creation example\", \"uri\": \"http://example.com\"}}]"
+  }
+]
