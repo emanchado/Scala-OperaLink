@@ -6,7 +6,7 @@ import scala.util.parsing.json.{JSON, JSONArray, JSONObject}
 package org.demiurgo.operalink {
   class LinkServerProxy(var consumer: Token,
                         var accessToken: Token) {
-    val serverBaseUrl = "https://link.api.opera.com/"
+    val serverBaseUrl = "https://link.api.opera.com"
 
     def get(path: String): String = {
       return Http(serverBaseUrl + path).oauth(consumer, accessToken).asString
@@ -167,6 +167,8 @@ package org.demiurgo.operalink {
   }
 }
 
+import org.demiurgo.operalink.LinkAPI
+
 object ScalaJLinkTest {
   def main(args: Array[String]) {
     val consumer = Token("8NrRjW2WhWjQIZNbVXZMCWveSkmvQJHn",
@@ -189,7 +191,10 @@ object ScalaJLinkTest {
       }
     }
 
-    /* println(Http("https://link.api.opera.com/rest/speeddial/children/").header("content-type", "application/json").oauth(consumer, accessToken).asString) */
-    println(Http("https://link.api.opera.com/rest/speeddial/children/").oauth(consumer, accessToken).asString)
+    val api = new LinkAPI(consumer, accessToken)
+    val speedDial = api.getSpeedDial
+    for (slot <- speedDial) {
+      println(slot.position + " - " + slot.uri)
+    }
   }
 }
