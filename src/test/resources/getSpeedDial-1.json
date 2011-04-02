@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/speeddial/children",
+    "response": "[{\"item_type\": \"speeddial\", \"id\": \"1\", \"properties\": {\"reload_interval\": \"2147483646\", \"title\": \"Opera Portal beta\", \"uri\": \"http://redir.opera.com/speeddials/portal/\", \"reload_only_if_expired\": \"0\", \"reload_enabled\": \"0\"}}, {\"item_type\": \"speeddial\", \"id\": \"3\", \"properties\": {\"reload_interval\": \"2147483646\", \"title\": \"My Opera\", \"uri\": \"http://redir.opera.com/speeddials/myopera/\", \"reload_only_if_expired\": \"0\", \"reload_enabled\": \"0\"}}]"
+  }
+]

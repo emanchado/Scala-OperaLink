@@ -1,0 +1,9 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/speeddial/1",
+    "params": { "title": "New title",
+                "api_method": "update" },
+    "response": "[{\"item_type\": \"speeddial\", \"id\": \"1\", \"properties\": {\"title\": \"New title\", \"uri\": \"http://example.com\"}}]"
+  }
+]

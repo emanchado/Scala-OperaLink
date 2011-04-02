@@ -1,0 +1,10 @@
+[
+  {
+    "item_type": "speeddial",
+    "id": "1",
+    "properties": {
+      "title": "First Speed Dial creation example",
+      "uri": "http://example.com"
+    }
+  }
+]
