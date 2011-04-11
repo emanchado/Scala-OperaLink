@@ -1,5 +1,6 @@
 import scalaj.http.{Http, Token}
 import scala.util.parsing.json.{JSON, JSONObject, JSONArray}
+import org.demiurgo.operalink.LinkServerProxy
 
 package org.demiurgo.operalink {
   abstract class LinkAPIItem(propertySet: JSONObject) {
@@ -7,6 +8,7 @@ package org.demiurgo.operalink {
     val baseHash = propertySet.obj.asInstanceOf[Map[String, String]]
 
     def id: String = baseHash("id")
+    def itemType: String = baseHash("item_type")
     def propertyList: Array[String]
   }
 
@@ -50,12 +52,17 @@ package org.demiurgo.operalink {
 
 
   class BookmarkFolder(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
+    val childrenList = propertySet.obj("children").asInstanceOf[JSONArray].list.asInstanceOf[Seq[JSONObject]]
     def propertyList: Array[String] = {
       return Array("title", "description", "nickname",
                    "type", "target")
     }
 
     def title: String = propertyHash("title")
+    def contents: Seq[BookmarkEntry] = {
+      return for { entry <- childrenList }
+                 yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[BookmarkEntry]
+    }
   }
 
 
@@ -111,7 +118,7 @@ package org.demiurgo.operalink {
         throw new Exception("Invalid options: " + userOptions.keys.mkString(", "))
       }
       val json =
-        serverProxy.get("/rest/bookmark/" + folder)
+        serverProxy.get("/rest/bookmark/" + folder + apiMethod)
       return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
              yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
     }
