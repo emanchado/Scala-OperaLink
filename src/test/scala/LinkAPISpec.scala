@@ -108,4 +108,41 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmark.title should equal("Kayak")
     bookmark.uri should equal("http://redir.opera.com/bookmarks/kayak")
   }
+
+  it should "correctly recognise folders inside folders (you need to go deeper)" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getBookmarks-3")
+    val bookmarks = api.getBookmarks(Map[String, String]("recursive" -> "true"))
+    bookmarks.length should equal(1)
+    // The item is a folder
+    val folder = bookmarks(0).asInstanceOf[BookmarkFolder]
+    folder.id should equal("24387990426311DE8E95FBB28A4386E0")
+    folder.itemType should equal("bookmark_folder")
+    folder.title should equal("tmp")
+    // Check the contents of the folder
+    val children = folder.contents
+    val entry1 = children(0).asInstanceOf[BookmarkFolder]
+    val entry2 = children(1).asInstanceOf[Bookmark]
+    entry1.id should equal("1CE31BB0342E11DFBF42FDB89FA75814")
+    entry1.itemType should equal("bookmark_folder")
+    entry1.title should equal("watch")
+    // This subfolder has two bookmarks inside
+    val grandchildren = entry1.contents
+    val subitem1 = grandchildren(0).asInstanceOf[Bookmark]
+    val subitem2 = grandchildren(1).asInstanceOf[Bookmark]
+    subitem1.id should equal("8B817840591811E0A3139639F0EB548B")
+    subitem1.itemType should equal("bookmark")
+    subitem1.uri should equal("http://www.imdb.com/title/tt1341167/")
+    subitem1.title should equal("Four Lions (2010) - IMDb")
+    subitem2.id should equal("68C4ADC0564F11E0948BEA342F20E09C")
+    subitem2.itemType should equal("bookmark")
+    subitem2.uri should equal("http://www.weroy.org/watch.shtml")
+    subitem2.title should equal("We. Arundhati Roy - Watch It")
+
+    entry2.id should equal("772071F05A0B11E0A315CCF76087BBD9")
+    entry2.itemType should equal("bookmark")
+    entry2.title should equal("QWOP")
+    entry2.uri should equal("http://www.foddy.net/Athletics.html")
+  }
 }
