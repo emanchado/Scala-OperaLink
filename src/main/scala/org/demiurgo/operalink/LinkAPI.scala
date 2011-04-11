@@ -10,6 +10,15 @@ package org.demiurgo.operalink {
     def propertyList: Array[String]
   }
 
+  object LinkAPIItem {
+    def fromJsonObject(jsonObject: JSONObject): LinkAPIItem = {
+      return jsonObject.obj.asInstanceOf[Map[String, String]]("item_type") match {
+        case "bookmark" => new Bookmark(jsonObject)
+        case "bookmark_folder" => new BookmarkFolder(jsonObject)
+        case "bookmark_separator" => new BookmarkSeparator(jsonObject)
+      }
+    }
+  }
 
   class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
     def position: String = id
@@ -104,11 +113,7 @@ package org.demiurgo.operalink {
       val json =
         serverProxy.get("/rest/bookmark/" + folder)
       return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
-             yield item.asInstanceOf[JSONObject].obj.asInstanceOf[Map[String, String]]("item_type") match {
-        case "bookmark" => new Bookmark(item.asInstanceOf[JSONObject])
-        case "bookmark_folder" => new BookmarkFolder(item.asInstanceOf[JSONObject])
-        case "bookmark_separator" => new BookmarkSeparator(item.asInstanceOf[JSONObject])
-      }
+             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
     }
   }
 }
