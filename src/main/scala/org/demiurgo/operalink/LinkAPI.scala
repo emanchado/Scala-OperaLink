@@ -87,8 +87,8 @@ package org.demiurgo.operalink {
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
 
-    def createSpeedDial(position: Int,
-                        properties: Map[String, String]): SpeedDialSlot = {
+    def createSpeedDialSlot(position: Int,
+                            properties: Map[String, String]): SpeedDialSlot = {
       val json = serverProxy.post("/rest/speeddial/" + position, properties)
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }

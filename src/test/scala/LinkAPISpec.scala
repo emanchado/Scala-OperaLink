@@ -46,7 +46,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     val properties = Map[String, String](
       "title" -> "First Speed Dial creation example",
       "uri"   -> "http://example.com")
-    val speedDial = api.createSpeedDial(1, properties)
+    val speedDial = api.createSpeedDialSlot(1, properties)
     speedDial.title should equal("First Speed Dial creation example")
     speedDial.uri should equal("http://example.com")
   }
