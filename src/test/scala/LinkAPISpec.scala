@@ -81,7 +81,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "getBookmarks-2")
-    val bookmarks = api.getBookmarks(Map[String, String]("recursive" -> "true"))
+    val bookmarks = api.getBookmarksRecursively()
     bookmarks.length should equal(2)
     // First item is a folder
     val folder = bookmarks(0).asInstanceOf[BookmarkFolder]
@@ -113,7 +113,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "getBookmarks-3")
-    val bookmarks = api.getBookmarks(Map[String, String]("recursive" -> "true"))
+    val bookmarks = api.getBookmarksRecursively()
     bookmarks.length should equal(1)
     // The item is a folder
     val folder = bookmarks(0).asInstanceOf[BookmarkFolder]

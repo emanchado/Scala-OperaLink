@@ -102,26 +102,25 @@ package org.demiurgo.operalink {
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
 
-    def getBookmarks(options: Map[String, String] = Map[String, String]()): Seq[BookmarkEntry] = {
-      var folder    = ""
-      var apiMethod = "children"
-      var userOptions = options
-      if (userOptions.contains("folder")) {
-        folder = userOptions("folder") + "/"
-        userOptions = userOptions - "folder"
+    def genericRequest(dataType: String,
+                       apiMethod: String,
+                       itemId: Option[String] = None): Seq[LinkAPIItem] = {
+      var itemIdString = itemId match {
+        case Some(folderId) => itemId + "/"
+        case None           => ""
       }
-      if (userOptions.contains("recursive")) {
-        apiMethod = "descendants"
-        userOptions = userOptions - "recursive"
-      }
-      if (userOptions.keys.size != 0) {
-        throw new Exception("Invalid options: " + userOptions.keys.mkString(", "))
-      }
-      val json =
-        serverProxy.get("/rest/bookmark/" + folder + apiMethod)
-      return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
-             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
+      val jsonText =
+        serverProxy.get("/rest/" + dataType + "/" + itemIdString + apiMethod)
+      return for { item <- JSON.parseRaw(jsonText).get.asInstanceOf[JSONArray].list }
+             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject])
+    }
+
+    def getBookmarks(fromFolder: Option[String] = None): Seq[BookmarkEntry] = {
+      return genericRequest("bookmark", "children", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
+    }
+
+    def getBookmarksRecursively(fromFolder: Option[String] = None): Seq[BookmarkEntry] = {
+      return genericRequest("bookmark", "descendants", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
     }
   }
 }
-
