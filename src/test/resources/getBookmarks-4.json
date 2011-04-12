@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/bookmark/children",
+    "response": "[{\"item_type\": \"bookmark_separator\", \"id\": \"26DFA4D09B9B11DDB3CCFAF9CF5DDB57\", \"properties\": {}}]"
+  }
+]

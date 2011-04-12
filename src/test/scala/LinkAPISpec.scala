@@ -145,4 +145,15 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     entry2.title should equal("QWOP")
     entry2.uri should equal("http://www.foddy.net/Athletics.html")
   }
+
+  it should "correctly recognise separators" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getBookmarks-4")
+    val bookmarks = api.getBookmarks()
+    bookmarks.length should equal(1)
+    val sep = bookmarks(0).asInstanceOf[BookmarkSeparator]
+    sep.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
+    sep.itemType should equal("bookmark_separator")
+  }
 }
