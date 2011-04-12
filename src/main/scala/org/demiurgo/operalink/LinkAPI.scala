@@ -106,8 +106,8 @@ package org.demiurgo.operalink {
                        apiMethod: String,
                        itemId: Option[String] = None): Seq[LinkAPIItem] = {
       var itemIdString = itemId match {
-        case Some(folderId) => itemId + "/"
-        case None           => ""
+        case Some(id) => id + "/"
+        case None     => ""
       }
       val jsonText =
         serverProxy.get("/rest/" + dataType + "/" + itemIdString + apiMethod)

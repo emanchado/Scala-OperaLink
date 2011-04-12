@@ -156,4 +156,21 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     sep.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
     sep.itemType should equal("bookmark_separator")
   }
+
+  it should "correctly ask for bookmarks inside a given folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getBookmarks-5")
+    val bookmarks = api.getBookmarks(Some("abc123"))
+    bookmarks.length should equal(1)
+    val sep = bookmarks(0).asInstanceOf[BookmarkSeparator]
+    sep.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
+    sep.itemType should equal("bookmark_separator")
+
+    val bookmarksRecursive = api.getBookmarksRecursively(Some("abc123"))
+    bookmarksRecursive.length should equal(1)
+    val sepRecursive = bookmarksRecursive(0).asInstanceOf[BookmarkSeparator]
+    sepRecursive.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
+    sepRecursive.itemType should equal("bookmark_separator")
+  }
 }
