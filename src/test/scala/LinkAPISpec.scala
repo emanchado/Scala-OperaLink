@@ -173,4 +173,20 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     sepRecursive.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
     sepRecursive.itemType should equal("bookmark_separator")
   }
+
+  it should "create a new bookmark properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createBookmark-1")
+    val title    = "Title for the new bookmark"
+    val uri      = "http://example.com"
+    val nickname = "e"
+    val bookmark = api.createBookmark(Map[String, String](
+      "title" -> title,
+      "uri"   -> uri,
+      "nickname" -> nickname))
+    bookmark.title    should equal(title)
+    bookmark.uri      should equal(uri)
+    bookmark.nickname should equal(nickname)
+  }
 }

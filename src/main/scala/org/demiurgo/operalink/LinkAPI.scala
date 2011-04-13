@@ -125,5 +125,10 @@ package org.demiurgo.operalink {
     def getBookmarksRecursively(fromFolder: Option[String] = None): Seq[BookmarkEntry] = {
       return genericRequest("bookmark", "descendants", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
     }
+
+    def createBookmark(properties: Map[String, String]): Bookmark = {
+      val json = serverProxy.post("/rest/bookmark/", properties)
+      return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+    }
   }
 }
