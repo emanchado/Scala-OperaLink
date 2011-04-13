@@ -105,9 +105,9 @@ package org.demiurgo.operalink {
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
 
-    def genericRequest(dataType: String,
-                       apiMethod: String,
-                       itemId: Option[String] = None): Seq[LinkAPIItem] = {
+    def genericGetRequest(dataType: String,
+                          apiMethod: String,
+                          itemId: Option[String] = None): Seq[LinkAPIItem] = {
       var itemIdString = itemId match {
         case Some(id) => id + "/"
         case None     => ""
@@ -119,11 +119,11 @@ package org.demiurgo.operalink {
     }
 
     def getBookmarks(fromFolder: Option[String] = None): Seq[BookmarkEntry] = {
-      return genericRequest("bookmark", "children", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
+      return genericGetRequest("bookmark", "children", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
     }
 
     def getBookmarksRecursively(fromFolder: Option[String] = None): Seq[BookmarkEntry] = {
-      return genericRequest("bookmark", "descendants", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
+      return genericGetRequest("bookmark", "descendants", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
     }
 
     def createBookmark(properties: Map[String, String]): Bookmark = {
