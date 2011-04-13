@@ -48,6 +48,9 @@ package org.demiurgo.operalink {
 
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
+    def description: String = propertyHash("description")
+    def nickname: String = propertyHash("nickname")
+    def icon: String = propertyHash("icon")
   }
 
 
