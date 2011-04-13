@@ -178,13 +178,16 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "createBookmark-1")
+    val itemType = "bookmark"
     val title    = "Title for the new bookmark"
     val uri      = "http://example.com"
     val nickname = "e"
     val bookmark = api.createBookmark(Map[String, String](
-      "title" -> title,
-      "uri"   -> uri,
-      "nickname" -> nickname))
+      "item_type" -> itemType,
+      "title"     -> title,
+      "uri"       -> uri,
+      "nickname"  -> nickname))
+    bookmark.itemType should equal(itemType)
     bookmark.title    should equal(title)
     bookmark.uri      should equal(uri)
     bookmark.nickname should equal(nickname)

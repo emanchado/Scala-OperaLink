@@ -3,8 +3,9 @@
     "method": "post",
     "path": "/rest/bookmark/",
     "params": { "title":    "Title for the new bookmark",
-                "uri":      "http://example.com",
-                "nickname": "e"},
+                "uri":       "http://example.com",
+                "item_type": "bookmark",
+                "nickname":  "e"},
     "response": "[{\"item_type\": \"bookmark\", \"id\": \"123456789\", \"properties\": {\"title\": \"Title for the new bookmark\", \"uri\": \"http://example.com\", \"nickname\": \"e\"}}]"
   }
 ]
