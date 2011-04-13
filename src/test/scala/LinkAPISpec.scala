@@ -192,4 +192,14 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmark.uri      should equal(uri)
     bookmark.nickname should equal(nickname)
   }
+
+  it should "update a bookmark properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "updateBookmark-1")
+    val newTitle = "Updated title"
+    val bookmark = api.updateBookmark("123abc", Map[String, String](
+      "title" -> newTitle))
+    bookmark.title should equal(newTitle)
+  }
 }

@@ -130,5 +130,14 @@ package org.demiurgo.operalink {
       val json = serverProxy.post("/rest/bookmark/", properties)
       return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
+
+    def updateBookmark(id: String,
+                       properties: Map[String, String]): Bookmark = {
+      val json =
+        serverProxy.post("/rest/bookmark/" + id,
+                         properties ++
+                             Map[String, String]("api_method" -> "update"))
+      return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+    }
   }
 }

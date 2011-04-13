@@ -1,0 +1,9 @@
+ [
+  {
+    "method": "post",
+    "path": "/rest/bookmark/123abc",
+    "params": { "title":      "Updated title",
+                "api_method": "update" },
+    "response": "[{\"item_type\": \"bookmark\", \"id\": \"123abc\", \"properties\": {\"title\": \"Updated title\", \"uri\": \"http://example.com\", \"nickname\": \"e\"}}]"
+  }
+]
