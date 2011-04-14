@@ -157,5 +157,12 @@ package org.demiurgo.operalink {
         throw new Exception("Error deleting bookmark " + id)
       }
     }
+
+    def trashBookmark(id: String): BookmarkEntry = {
+      val json =
+        serverProxy.post("/rest/bookmark/" + id,
+                         Map[String, String]("api_method" -> "trash"))
+      return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
+    }
   }
 }
