@@ -1,0 +1,8 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/bookmark/",
+    "params": { "item_type": "bookmark_separator" },
+    "response": "[{\"item_type\": \"bookmark_separator\", \"id\": \"123456789\", \"properties\": {}}]"
+  }
+]

@@ -139,9 +139,26 @@ package org.demiurgo.operalink {
       return genericGetRequest("bookmark", "", Some(id)).asInstanceOf[Seq[BookmarkEntry]](0)
     }
 
-    def createBookmark(properties: Map[String, String]): Bookmark = {
+    def createBookmarkGeneric(properties: Map[String, String]): BookmarkEntry = {
       val json = serverProxy.post("/rest/bookmark/", properties)
-      return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+      return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
+    }
+
+    def createBookmark(properties: Map[String, String]): Bookmark = {
+      return createBookmarkGeneric(properties ++
+                                     Map("item_type" -> "bookmark")).
+              asInstanceOf[Bookmark]
+    }
+
+    def createBookmarkFolder(properties: Map[String, String]): BookmarkFolder = {
+      return createBookmarkGeneric(properties ++
+                                     Map("item_type" -> "bookmark_folder")).
+              asInstanceOf[BookmarkFolder]
+    }
+
+    def createBookmarkSeparator(): BookmarkSeparator = {
+      return createBookmarkGeneric(Map("item_type" -> "bookmark_separator")).
+              asInstanceOf[BookmarkSeparator]
     }
 
     def updateBookmark(id: String,

@@ -1,0 +1,10 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/bookmark/",
+    "params": { "title":    "Folder title",
+                "item_type": "bookmark_folder",
+                "nickname":  "e"},
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"123456789\", \"properties\": {\"title\": \"Folder title\", \"nickname\": \"e\"}, \"children\": []}]"
+  }
+]
