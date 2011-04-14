@@ -234,4 +234,34 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmarkFolder.id should equal("abc456")
     bookmarkFolder.title should not equal("")
   }
+
+  it should "properly move a bookmark inside a folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "moveBookmark-1")
+    val bookmark = api.moveBookmarkInto("abc789",
+                                        "def123").asInstanceOf[Bookmark]
+    bookmark.id should equal("abc789")
+    bookmark.title should not equal("")
+  }
+
+  it should "properly move a bookmark before another element" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "moveBookmark-2")
+    val bookmark = api.moveBookmarkBefore("abc789",
+                                          "def123").asInstanceOf[Bookmark]
+    bookmark.id should equal("abc789")
+    bookmark.title should not equal("")
+  }
+
+  it should "properly move a bookmark after another element" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "moveBookmark-3")
+    val bookmark = api.moveBookmarkAfter("abc789",
+                                         "def123").asInstanceOf[Bookmark]
+    bookmark.id should equal("abc789")
+    bookmark.title should not equal("")
+  }
 }

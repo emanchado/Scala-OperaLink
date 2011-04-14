@@ -164,5 +164,31 @@ package org.demiurgo.operalink {
                          Map[String, String]("api_method" -> "trash"))
       return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
     }
+
+    def moveBookmarkGeneric(id: String, folderId: String,
+                            relativePosition: String): BookmarkEntry = {
+      val json =
+        serverProxy.post("/rest/bookmark/" + id,
+                         Map[String, String]("api_method" -> "move",
+                                             "relative_position" ->
+                                               relativePosition,
+                                             "reference_item" -> folderId))
+      return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.
+                                          asInstanceOf[JSONArray].list(0).
+                                          asInstanceOf[JSONObject]).
+              asInstanceOf[BookmarkEntry]
+    }
+
+    def moveBookmarkInto(id: String, folderId: String): BookmarkEntry = {
+      return moveBookmarkGeneric(id, folderId, "into")
+    }
+
+    def moveBookmarkBefore(id: String, folderId: String): BookmarkEntry = {
+      return moveBookmarkGeneric(id, folderId, "before")
+    }
+
+    def moveBookmarkAfter(id: String, folderId: String): BookmarkEntry = {
+      return moveBookmarkGeneric(id, folderId, "after")
+    }
   }
 }

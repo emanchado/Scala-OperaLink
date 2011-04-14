@@ -1,0 +1,10 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/bookmark/abc789",
+    "params": { "api_method":     "move",
+                "reference_item": "def123",
+                "relative_position": "into" },
+    "response": "[{\"item_type\": \"bookmark\", \"id\": \"abc789\", \"properties\": {\"title\": \"Title for the new bookmark\", \"uri\": \"http://example.com\", \"nickname\": \"e\"}}]"
+  }
+]
