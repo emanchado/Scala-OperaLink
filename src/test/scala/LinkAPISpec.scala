@@ -231,8 +231,8 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
                                               fakeAccessToken,
                                               "updateBookmark-1")
     val newTitle = "Updated title"
-    val bookmark = api.updateBookmark("123abc", Map[String, String](
-      "title" -> newTitle))
+    val bookmark = api.updateBookmark("123abc", Map("title" -> newTitle)).
+                    asInstanceOf[Bookmark]
     bookmark.title should equal(newTitle)
   }
 

@@ -144,7 +144,7 @@ package org.demiurgo.operalink {
     }
 
     def updateBookmark(id: String,
-                       properties: Map[String, String]): Bookmark = {
+                       properties: Map[String, String]): BookmarkEntry = {
       val json =
         serverProxy.post("/rest/bookmark/" + id,
                          properties ++ Map("api_method" -> "update"))
