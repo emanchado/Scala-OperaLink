@@ -1,0 +1,8 @@
+ [
+  {
+    "method": "post",
+    "path": "/rest/speeddial/1",
+    "params": { "api_method": "delete" },
+    "response": ""
+  }
+]

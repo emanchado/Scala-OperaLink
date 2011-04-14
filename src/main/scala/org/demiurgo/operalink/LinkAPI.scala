@@ -105,6 +105,15 @@ package org.demiurgo.operalink {
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
 
+    def deleteSpeedDialSlot(position: Int) {
+      val response =
+        serverProxy.post("/rest/speeddial/" + position,
+                         Map[String, String]("api_method" -> "delete"))
+      if (response != "") {
+        throw new Exception("Error deleting Speed Dial slot " + position)
+      }
+    }
+
     def genericGetRequest(dataType: String,
                           apiMethod: String,
                           itemId: Option[String] = None): Seq[LinkAPIItem] = {

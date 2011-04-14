@@ -61,6 +61,13 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     speedDial.uri should equal("http://example.com")
   }
 
+  it should "correctly delete an existing Speed Dial slot" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "deleteSpeedDialSlot-1")
+    api.deleteSpeedDialSlot(1)
+  }
+
   it should "correctly ask for bookmarks in the root folder" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
