@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/bookmark/abc456/",
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"abc456\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"title\": \"Blogs\", \"personal_bar_pos\": 5}, \"children\": []}]"
+  }
+]

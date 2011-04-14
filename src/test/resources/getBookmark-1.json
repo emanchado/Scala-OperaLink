@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/bookmark/abc123/",
+    "response": "[{\"item_type\": \"bookmark\", \"id\": \"abc123\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"title\": \"HCoder.org\", \"uri\": \"http://hcoder.org\", \"personal_bar_pos\": 5}}]"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/bookmark/abc789/",
+    "response": "[{\"item_type\": \"bookmark_separator\", \"id\": \"abc789\", \"properties\": {}}]"
+  }
+]
