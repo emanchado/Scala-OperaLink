@@ -62,6 +62,7 @@ package org.demiurgo.operalink {
     }
 
     def title: String = propertyHash("title")
+    def nickname: String = propertyHash("nickname")
     def contents: Seq[BookmarkEntry] = {
       return for { entry <- childrenList }
                  yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[BookmarkEntry]
