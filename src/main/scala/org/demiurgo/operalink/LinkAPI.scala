@@ -100,15 +100,14 @@ package org.demiurgo.operalink {
                             properties: Map[String, String]): SpeedDialSlot = {
       val json =
         serverProxy.post("/rest/speeddial/" + position,
-                         properties ++
-                             Map[String, String]("api_method" -> "update"))
+                         properties ++ Map("api_method" -> "update"))
       return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
 
     def deleteSpeedDialSlot(position: Int) {
       val response =
         serverProxy.post("/rest/speeddial/" + position,
-                         Map[String, String]("api_method" -> "delete"))
+                         Map("api_method" -> "delete"))
       if (response != "") {
         throw new Exception("Error deleting Speed Dial slot " + position)
       }
@@ -148,15 +147,13 @@ package org.demiurgo.operalink {
                        properties: Map[String, String]): Bookmark = {
       val json =
         serverProxy.post("/rest/bookmark/" + id,
-                         properties ++
-                             Map[String, String]("api_method" -> "update"))
+                         properties ++ Map("api_method" -> "update"))
       return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
 
     def deleteBookmark(id: String) {
       val response =
-        serverProxy.post("/rest/bookmark/" + id,
-                         Map[String, String]("api_method" -> "delete"))
+        serverProxy.post("/rest/bookmark/" + id, Map("api_method" -> "delete"))
       if (response != "") {
         throw new Exception("Error deleting bookmark " + id)
       }
@@ -165,7 +162,7 @@ package org.demiurgo.operalink {
     def trashBookmark(id: String): BookmarkEntry = {
       val json =
         serverProxy.post("/rest/bookmark/" + id,
-                         Map[String, String]("api_method" -> "trash"))
+                         Map("api_method" -> "trash"))
       return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
     }
 
@@ -173,10 +170,9 @@ package org.demiurgo.operalink {
                             relativePosition: String): BookmarkEntry = {
       val json =
         serverProxy.post("/rest/bookmark/" + id,
-                         Map[String, String]("api_method" -> "move",
-                                             "relative_position" ->
-                                               relativePosition,
-                                             "reference_item" -> folderId))
+                         Map("api_method" -> "move",
+                             "relative_position" -> relativePosition,
+                             "reference_item" -> folderId))
       return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.
                                           asInstanceOf[JSONArray].list(0).
                                           asInstanceOf[JSONObject]).

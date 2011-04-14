@@ -43,9 +43,8 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "createSpeedDial-1")
-    val properties = Map[String, String](
-      "title" -> "First Speed Dial creation example",
-      "uri"   -> "http://example.com")
+    val properties = Map("title" -> "First Speed Dial creation example",
+                         "uri"   -> "http://example.com")
     val speedDial = api.createSpeedDialSlot(1, properties)
     speedDial.title should equal("First Speed Dial creation example")
     speedDial.uri should equal("http://example.com")
@@ -55,7 +54,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "updateSpeedDialSlot-1")
-    val properties = Map[String, String]("title" -> "New title")
+    val properties = Map("title" -> "New title")
     val speedDial = api.updateSpeedDialSlot(1, properties)
     speedDial.title should equal("New title")
     speedDial.uri should equal("http://example.com")
@@ -216,7 +215,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     val title    = "Title for the new bookmark"
     val uri      = "http://example.com"
     val nickname = "e"
-    val bookmark = api.createBookmark(Map[String, String](
+    val bookmark = api.createBookmark(Map(
       "item_type" -> itemType,
       "title"     -> title,
       "uri"       -> uri,
