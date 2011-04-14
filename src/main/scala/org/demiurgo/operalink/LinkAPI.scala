@@ -148,5 +148,14 @@ package org.demiurgo.operalink {
                              Map[String, String]("api_method" -> "update"))
       return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
     }
+
+    def deleteBookmark(id: String) {
+      val response =
+        serverProxy.post("/rest/bookmark/" + id,
+                         Map[String, String]("api_method" -> "delete"))
+      if (response != "") {
+        throw new Exception("Error deleting bookmark " + id)
+      }
+    }
   }
 }

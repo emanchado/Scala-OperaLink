@@ -209,4 +209,11 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
       "title" -> newTitle))
     bookmark.title should equal(newTitle)
   }
+
+  it should "delete a bookmark properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "deleteBookmark-1")
+    api.deleteBookmark("abc123")
+  }
 }
