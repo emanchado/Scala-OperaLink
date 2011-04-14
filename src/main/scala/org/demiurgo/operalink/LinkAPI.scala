@@ -139,9 +139,23 @@ package org.demiurgo.operalink {
       return genericGetRequest("bookmark", "", Some(id)).asInstanceOf[Seq[BookmarkEntry]](0)
     }
 
+    def genericPostRequest(dataType: String,
+                           properties: Map[String, String],
+                           itemId: Option[String] = None): Seq[LinkAPIItem] = {
+      var itemIdString = itemId match {
+        case Some(id) => id
+        case None     => ""
+      }
+      val json = serverProxy.post("/rest/" + dataType +
+                                    "/" + itemIdString,
+                                  properties)
+      return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
+             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject])
+    }
+
     def createBookmarkGeneric(properties: Map[String, String]): BookmarkEntry = {
-      val json = serverProxy.post("/rest/bookmark/", properties)
-      return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
+      return genericPostRequest("bookmark", properties, None)(0).
+              asInstanceOf[BookmarkEntry]
     }
 
     def createBookmark(properties: Map[String, String]): Bookmark = {
@@ -163,10 +177,10 @@ package org.demiurgo.operalink {
 
     def updateBookmark(id: String,
                        properties: Map[String, String]): BookmarkEntry = {
-      val json =
-        serverProxy.post("/rest/bookmark/" + id,
-                         properties ++ Map("api_method" -> "update"))
-      return new Bookmark(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+      return genericPostRequest("bookmark",
+                                properties ++ Map("api_method" -> "update"),
+                                Some(id))(0).
+              asInstanceOf[BookmarkEntry]
     }
 
     def deleteBookmark(id: String) {
@@ -178,22 +192,18 @@ package org.demiurgo.operalink {
     }
 
     def trashBookmark(id: String): BookmarkEntry = {
-      val json =
-        serverProxy.post("/rest/bookmark/" + id,
-                         Map("api_method" -> "trash"))
-      return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject]).asInstanceOf[BookmarkEntry]
+      return genericPostRequest("bookmark", Map("api_method" -> "trash"),
+                                Some(id))(0).
+              asInstanceOf[BookmarkEntry]
     }
 
     def moveBookmarkGeneric(id: String, folderId: String,
                             relativePosition: String): BookmarkEntry = {
-      val json =
-        serverProxy.post("/rest/bookmark/" + id,
-                         Map("api_method" -> "move",
-                             "relative_position" -> relativePosition,
-                             "reference_item" -> folderId))
-      return LinkAPIItem.fromJsonObject(JSON.parseRaw(json).get.
-                                          asInstanceOf[JSONArray].list(0).
-                                          asInstanceOf[JSONObject]).
+      return genericPostRequest("bookmark",
+                                Map("api_method" -> "move",
+                                    "relative_position" -> relativePosition,
+                                    "reference_item" -> folderId),
+                                Some(id))(0).
               asInstanceOf[BookmarkEntry]
     }
 
