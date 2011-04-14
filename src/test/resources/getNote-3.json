@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/note/abc789/",
+    "response": "[{\"item_type\": \"note_separator\", \"id\": \"abc789\", \"properties\": {}}]"
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/note/",
+    "params": { "content":   "Content for the new note",
+                "uri":       "http://example.com",
+                "item_type": "note"},
+    "response": "[{\"item_type\": \"note\", \"id\": \"123456789\", \"properties\": {\"content\": \"Content for the new note\", \"uri\": \"http://example.com\"}}]"
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/note/",
+    "params": { "title":    "Folder title",
+                "item_type": "note_folder" },
+    "response": "[{\"item_type\": \"note_folder\", \"id\": \"123456789\", \"properties\": {\"title\": \"Folder title\"}, \"children\": []}]"
+  }
+]

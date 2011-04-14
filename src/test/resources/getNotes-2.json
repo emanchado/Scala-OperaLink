@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/note/descendants",
+    "response": "[{\"item_type\": \"note_folder\", \"properties\": {\"title\": \"Opera\"}, \"children\": [{\"item_type\": \"note\", \"id\": \"E22DD370524511E08C5E9ABB8DF3792F\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"content\": \"Download Opera\"}}, {\"item_type\": \"note\", \"id\": \"E22DFA80524511E08C5FCEAA6EDD412E\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"content\": \"Latest news\", \"uri\": \"http://my.opera.com/\", \"personal_bar_pos\": 3}}], \"id\": \"E22DAC60524511E08C5DF05498BE0285\"}, {\"item_type\": \"note\", \"id\": \"E22E6FB0524511E08C63D6C3F6B25E7D\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"content\": \"Some note created by hand\"}}]"
+  }
+]

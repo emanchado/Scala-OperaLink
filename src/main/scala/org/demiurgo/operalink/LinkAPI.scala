@@ -18,6 +18,9 @@ package org.demiurgo.operalink {
         case "bookmark" => new Bookmark(jsonObject)
         case "bookmark_folder" => new BookmarkFolder(jsonObject)
         case "bookmark_separator" => new BookmarkSeparator(jsonObject)
+        case "note" => new Note(jsonObject)
+        case "note_folder" => new NoteFolder(jsonObject)
+        case "note_separator" => new NoteSeparator(jsonObject)
       }
     }
   }
@@ -71,6 +74,43 @@ package org.demiurgo.operalink {
 
 
   class BookmarkSeparator(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
+    def propertyList: Array[String] = {
+      return Array()
+    }
+  }
+
+
+  abstract class NoteEntry(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+  }
+
+
+  class Note(propertySet: JSONObject) extends NoteEntry(propertySet) {
+    def propertyList: Array[String] = {
+      return Array("uri", "content", "created")
+    }
+
+    def content: String = propertyHash("content")
+    def uri: String = propertyHash.getOrElse("uri", "")
+    def created: String = propertyHash("created")
+  }
+
+
+  class NoteFolder(propertySet: JSONObject) extends NoteEntry(propertySet) {
+    val childrenList = propertySet.obj("children").asInstanceOf[JSONArray].list.asInstanceOf[Seq[JSONObject]]
+    def propertyList: Array[String] = {
+      return Array("title", "description", "nickname",
+                   "type", "target")
+    }
+
+    def title: String = propertyHash("title")
+    def contents: Seq[NoteEntry] = {
+      return for { entry <- childrenList }
+                 yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[NoteEntry]
+    }
+  }
+
+
+  class NoteSeparator(propertySet: JSONObject) extends NoteEntry(propertySet) {
     def propertyList: Array[String] = {
       return Array()
     }
@@ -217,6 +257,85 @@ package org.demiurgo.operalink {
 
     def moveBookmarkAfter(id: String, folderId: String): BookmarkEntry = {
       return moveBookmarkGeneric(id, folderId, "after")
+    }
+
+    def getNotes(fromFolder: Option[String] = None): Seq[NoteEntry] = {
+      return genericGetRequest("note", "children", fromFolder).asInstanceOf[Seq[NoteEntry]]
+    }
+
+    def getNotesRecursively(fromFolder: Option[String] = None): Seq[NoteEntry] = {
+      return genericGetRequest("note", "descendants", fromFolder).asInstanceOf[Seq[NoteEntry]]
+    }
+
+    def getNote(id: String): NoteEntry = {
+      return genericGetRequest("note", "", Some(id)).
+              asInstanceOf[Seq[NoteEntry]](0)
+    }
+
+    def createNoteGeneric(properties: Map[String, String]): NoteEntry = {
+      return genericPostRequest("note", properties, None)(0).
+              asInstanceOf[NoteEntry]
+    }
+
+    def createNote(properties: Map[String, String]): Note = {
+      return createNoteGeneric(properties ++
+                                     Map("item_type" -> "note")).
+              asInstanceOf[Note]
+    }
+
+    def createNoteFolder(properties: Map[String, String]): NoteFolder = {
+      return createNoteGeneric(properties ++
+                                     Map("item_type" -> "note_folder")).
+              asInstanceOf[NoteFolder]
+    }
+
+    def createNoteSeparator(): NoteSeparator = {
+      return createNoteGeneric(Map("item_type" -> "note_separator")).
+              asInstanceOf[NoteSeparator]
+    }
+
+    def updateNote(id: String,
+                       properties: Map[String, String]): NoteEntry = {
+      return genericPostRequest("note",
+                                properties ++ Map("api_method" -> "update"),
+                                Some(id))(0).
+              asInstanceOf[NoteEntry]
+    }
+
+    def deleteNote(id: String) {
+      val response =
+        serverProxy.post("/rest/note/" + id, Map("api_method" -> "delete"))
+      if (response != "") {
+        throw new Exception("Error deleting note " + id)
+      }
+    }
+
+    def trashNote(id: String): NoteEntry = {
+      return genericPostRequest("note", Map("api_method" -> "trash"),
+                                Some(id))(0).
+              asInstanceOf[NoteEntry]
+    }
+
+    def moveNoteGeneric(id: String, folderId: String,
+                            relativePosition: String): NoteEntry = {
+      return genericPostRequest("note",
+                                Map("api_method" -> "move",
+                                    "relative_position" -> relativePosition,
+                                    "reference_item" -> folderId),
+                                Some(id))(0).
+              asInstanceOf[NoteEntry]
+    }
+
+    def moveNoteInto(id: String, folderId: String): NoteEntry = {
+      return moveNoteGeneric(id, folderId, "into")
+    }
+
+    def moveNoteBefore(id: String, folderId: String): NoteEntry = {
+      return moveNoteGeneric(id, folderId, "before")
+    }
+
+    def moveNoteAfter(id: String, folderId: String): NoteEntry = {
+      return moveNoteGeneric(id, folderId, "after")
     }
   }
 }

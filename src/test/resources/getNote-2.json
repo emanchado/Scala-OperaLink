@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/note/abc456/",
+    "response": "[{\"item_type\": \"note_folder\", \"id\": \"abc456\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"title\": \"Blogs\"}, \"children\": []}]"
+  }
+]

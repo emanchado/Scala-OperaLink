@@ -1,0 +1,8 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/note/abc456",
+    "params": { "api_method": "trash" },
+    "response": "[{\"item_type\": \"note_folder\", \"id\": \"abc456\", \"properties\": {\"title\": \"Title for the new note\"}, \"children\": []}]"
+  }
+]

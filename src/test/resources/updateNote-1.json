@@ -1,0 +1,9 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/note/123abc",
+    "params": { "content":    "Updated content",
+                "api_method": "update" },
+    "response": "[{\"item_type\": \"note\", \"id\": \"123abc\", \"properties\": {\"content\": \"Updated content\", \"uri\": \"http://example.com\"}}]"
+  }
+]

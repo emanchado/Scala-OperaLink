@@ -1,0 +1,10 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/note/abc789",
+    "params": { "api_method":     "move",
+                "reference_item": "def123",
+                "relative_position": "into" },
+    "response": "[{\"item_type\": \"note\", \"id\": \"abc789\", \"properties\": {\"content\": \"Content for the new note\", \"uri\": \"http://example.com\"}}]"
+  }
+]

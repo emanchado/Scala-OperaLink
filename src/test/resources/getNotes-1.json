@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/note/children",
+    "response": "[{\"item_type\": \"note\", \"id\": \"E22EE4E0524511E08C68A6DDBCB261C0\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"content\": \"The Free Encyclopedia\", \"uri\": \"http://es.wikipedia.org/wiki/Wikipedia:Portada\"}}, {\"item_type\": \"note\", \"id\": \"E22F0BF0524511E08C69D46C240865CA\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"uri\": \"http://redir.opera.com/bookmarks/fastmail\", \"content\": \"Email for Families and Individuals\"}}]"
+  }
+]

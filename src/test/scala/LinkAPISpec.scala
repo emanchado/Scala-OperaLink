@@ -115,7 +115,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmark.uri should equal("http://redir.opera.com/bookmarks/kayak")
   }
 
-  it should "correctly recognise folders inside folders (you need to go deeper)" in {
+  it should "correctly recognise bookmark folders inside folders (you need to go deeper)" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "getBookmarks-3")
@@ -152,7 +152,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     entry2.uri should equal("http://www.foddy.net/Athletics.html")
   }
 
-  it should "correctly recognise separators" in {
+  it should "correctly recognise bookmark separators" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "getBookmarks-4")
@@ -309,5 +309,243 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
                                          "def123").asInstanceOf[Bookmark]
     bookmark.id should equal("abc789")
     bookmark.title should not equal("")
+  }
+
+  it should "correctly ask for notes in the root folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNotes-1")
+    val notes = api.getNotes()
+    notes.length should equal(2)
+    val firstNote = notes(0).asInstanceOf[Note]
+    firstNote.id should equal("E22EE4E0524511E08C68A6DDBCB261C0")
+    firstNote.content should equal("The Free Encyclopedia")
+    firstNote.uri should equal("http://es.wikipedia.org/wiki/Wikipedia:Portada")
+    val secondNote = notes(1).asInstanceOf[Note]
+    secondNote.id should equal("E22F0BF0524511E08C69D46C240865CA")
+    secondNote.content should equal("Email for Families and Individuals")
+    secondNote.uri should equal("http://redir.opera.com/bookmarks/fastmail")
+  }
+
+  it should "correctly recognise notes inside folders" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNotes-2")
+    val notes = api.getNotesRecursively()
+    notes.length should equal(2)
+    // First item is a folder
+    val folder = notes(0).asInstanceOf[NoteFolder]
+    folder.id should equal("E22DAC60524511E08C5DF05498BE0285")
+    folder.itemType should equal("note_folder")
+    folder.title should equal("Opera")
+    // Check the contents of the folder
+    val children = folder.contents
+    val note1 = children(0).asInstanceOf[Note]
+    val note2 = children(1).asInstanceOf[Note]
+    note1.id should equal("E22DD370524511E08C5E9ABB8DF3792F")
+    note1.itemType should equal("note")
+    note1.content should equal("Download Opera")
+    note1.uri should equal("")
+    note2.id should equal("E22DFA80524511E08C5FCEAA6EDD412E")
+    note2.itemType should equal("note")
+    note2.content should equal("Latest news")
+    note2.uri should equal("http://my.opera.com/")
+
+    // Second item is a regular note
+    val note = notes(1).asInstanceOf[Note]
+    note.id should equal("E22E6FB0524511E08C63D6C3F6B25E7D")
+    note.itemType should equal("note")
+    note.content should equal("Some note created by hand")
+    note.uri should equal("")
+  }
+
+  it should "correctly recognise note folders inside folders (you need to go deeper)" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNotes-3")
+    val notes = api.getNotesRecursively()
+    notes.length should equal(1)
+    // The item is a folder
+    val folder = notes(0).asInstanceOf[NoteFolder]
+    folder.id should equal("24387990426311DE8E95FBB28A4386E0")
+    folder.itemType should equal("note_folder")
+    folder.title should equal("tmp")
+    // Check the contents of the folder
+    val children = folder.contents
+    val entry1 = children(0).asInstanceOf[NoteFolder]
+    val entry2 = children(1).asInstanceOf[Note]
+    entry1.id should equal("1CE31BB0342E11DFBF42FDB89FA75814")
+    entry1.itemType should equal("note_folder")
+    entry1.title should equal("watch")
+    // This subfolder has two notes inside
+    val grandchildren = entry1.contents
+    val subitem1 = grandchildren(0).asInstanceOf[Note]
+    val subitem2 = grandchildren(1).asInstanceOf[Note]
+    subitem1.id should equal("8B817840591811E0A3139639F0EB548B")
+    subitem1.itemType should equal("note")
+    subitem1.uri should equal("http://www.imdb.com/title/tt1341167/")
+    subitem1.content should equal("Directed by Christopher Morris. With Will Adamsdale, Riz Ahmed, Adeel Akhtar, Kayvan Novak. 1")
+    subitem2.id should equal("68C4ADC0564F11E0948BEA342F20E09C")
+    subitem2.itemType should equal("note")
+    subitem2.uri should equal("http://www.weroy.org/watch.shtml")
+    subitem2.content should equal("We is a fast-paced 64 minute documentary that covers the world politics of power, war, corporations, deception and exploitation as seen through the eyes of Arundhati Roy.")
+
+    entry2.id should equal("772071F05A0B11E0A315CCF76087BBD9")
+    entry2.itemType should equal("note")
+    entry2.content should equal("Athletics Game")
+    entry2.uri should equal("http://www.foddy.net/Athletics.html")
+  }
+
+  it should "correctly recognise note separators" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNotes-4")
+    val notes = api.getNotes()
+    notes.length should equal(1)
+    val sep = notes(0).asInstanceOf[NoteSeparator]
+    sep.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
+    sep.itemType should equal("note_separator")
+  }
+
+  it should "correctly ask for notes inside a given folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNotes-5")
+    val notes = api.getNotes(Some("abc123"))
+    notes.length should equal(1)
+    val sep = notes(0).asInstanceOf[NoteSeparator]
+    sep.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
+    sep.itemType should equal("note_separator")
+
+    val notesRecursive = api.getNotesRecursively(Some("abc123"))
+    notesRecursive.length should equal(1)
+    val sepRecursive = notesRecursive(0).asInstanceOf[NoteSeparator]
+    sepRecursive.id should equal("26DFA4D09B9B11DDB3CCFAF9CF5DDB57")
+    sepRecursive.itemType should equal("note_separator")
+  }
+
+  it should "correctly ask for a single note" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNote-1")
+    val note = api.getNote("abc123").asInstanceOf[Note]
+    note.id should equal("abc123")
+    note.content should equal("HCoder.org")
+    note.uri should equal("http://hcoder.org")
+  }
+
+  it should "correctly ask for a single note folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNote-2")
+    val note_folder = api.getNote("abc456").asInstanceOf[NoteFolder]
+    note_folder.id should equal("abc456")
+    note_folder.title should equal("Blogs")
+  }
+
+  it should "correctly ask for a single note separator" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNote-3")
+    val note_separator = api.getNote("abc789").asInstanceOf[NoteSeparator]
+    note_separator.id should equal("abc789")
+  }
+
+  it should "create a new note properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createNote-1")
+    val title    = "Content for the new note"
+    val uri      = "http://example.com"
+    val note = api.createNote(Map(
+      "content"   -> title,
+      "uri"       -> uri))
+    note.itemType should equal("note")
+    note.content  should equal(title)
+    note.uri      should equal(uri)
+  }
+
+  it should "create a new note folder properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createNoteFolder-1")
+    val title    = "Folder title"
+    val noteFolder = api.createNoteFolder(Map(
+      "title"     -> title))
+    noteFolder.itemType should equal("note_folder")
+    noteFolder.title    should equal(title)
+  }
+
+  it should "create a new note separator properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createNoteSeparator-1")
+    val noteSeparator = api.createNoteSeparator()
+    noteSeparator.id should not equal("")
+  }
+
+  it should "update a note properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "updateNote-1")
+    val newTitle = "Updated content"
+    val note = api.updateNote("123abc", Map("content" -> newTitle)).
+                    asInstanceOf[Note]
+    note.content should equal(newTitle)
+  }
+
+  it should "delete a note properly" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "deleteNote-1")
+    api.deleteNote("abc123")
+  }
+
+  it should "properly send a note to trash" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "trashNote-1")
+    val note = api.trashNote("abc123").asInstanceOf[Note]
+    note.id should equal("abc123")
+    note.content should not equal("")
+  }
+
+  it should "properly send a note folder to trash" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "trashNote-2")
+    val noteFolder = api.trashNote("abc456").asInstanceOf[NoteFolder]
+    noteFolder.id should equal("abc456")
+    noteFolder.title should not equal("")
+  }
+
+  it should "properly move a note inside a folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "moveNote-1")
+    val note = api.moveNoteInto("abc789",
+                                        "def123").asInstanceOf[Note]
+    note.id should equal("abc789")
+    note.content should not equal("")
+  }
+
+  it should "properly move a note before another element" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "moveNote-2")
+    val note = api.moveNoteBefore("abc789",
+                                          "def123").asInstanceOf[Note]
+    note.id should equal("abc789")
+    note.content should not equal("")
+  }
+
+  it should "properly move a note after another element" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "moveNote-3")
+    val note = api.moveNoteAfter("abc789",
+                                         "def123").asInstanceOf[Note]
+    note.id should equal("abc789")
+    note.content should not equal("")
   }
 }
