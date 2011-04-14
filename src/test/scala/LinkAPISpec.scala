@@ -225,4 +225,13 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmark.id should equal("abc123")
     bookmark.title should not equal("")
   }
+
+  it should "properly send a bookmark folder to trash" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "trashBookmark-2")
+    val bookmarkFolder = api.trashBookmark("abc456").asInstanceOf[BookmarkFolder]
+    bookmarkFolder.id should equal("abc456")
+    bookmarkFolder.title should not equal("")
+  }
 }

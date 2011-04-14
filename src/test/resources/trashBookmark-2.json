@@ -1,0 +1,8 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/bookmark/abc456",
+    "params": { "api_method": "trash" },
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"abc456\", \"properties\": {\"title\": \"Title for the new bookmark\", \"nickname\": \"e\"}, \"children\": []}]"
+  }
+]
