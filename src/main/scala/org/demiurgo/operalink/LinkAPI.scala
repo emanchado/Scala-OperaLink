@@ -121,6 +121,33 @@ package org.demiurgo.operalink {
   class LinkAPI(val consumer: Token, val accessToken: Token) {
     var serverProxy = new LinkServerProxy(consumer, accessToken)
 
+    def genericGetRequest(dataType: String,
+                          apiMethod: String,
+                          itemId: Option[String] = None): Seq[LinkAPIItem] = {
+      var itemIdString = itemId match {
+        case Some(id) => id + "/"
+        case None     => ""
+      }
+      val jsonText =
+        serverProxy.get("/rest/" + dataType + "/" + itemIdString + apiMethod)
+      return for { item <- JSON.parseRaw(jsonText).get.asInstanceOf[JSONArray].list }
+             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject])
+    }
+
+    def genericPostRequest(dataType: String,
+                           properties: Map[String, String],
+                           itemId: Option[String] = None): Seq[LinkAPIItem] = {
+      var itemIdString = itemId match {
+        case Some(id) => id
+        case None     => ""
+      }
+      val json = serverProxy.post("/rest/" + dataType +
+                                    "/" + itemIdString,
+                                  properties)
+      return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
+             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject])
+    }
+
     def getSpeedDial: Seq[SpeedDialSlot] = {
       return genericGetRequest("speeddial", "children").asInstanceOf[Seq[SpeedDialSlot]]
     }
@@ -153,19 +180,6 @@ package org.demiurgo.operalink {
       }
     }
 
-    def genericGetRequest(dataType: String,
-                          apiMethod: String,
-                          itemId: Option[String] = None): Seq[LinkAPIItem] = {
-      var itemIdString = itemId match {
-        case Some(id) => id + "/"
-        case None     => ""
-      }
-      val jsonText =
-        serverProxy.get("/rest/" + dataType + "/" + itemIdString + apiMethod)
-      return for { item <- JSON.parseRaw(jsonText).get.asInstanceOf[JSONArray].list }
-             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject])
-    }
-
     def getBookmarks(fromFolder: Option[String] = None): Seq[BookmarkEntry] = {
       return genericGetRequest("bookmark", "children", fromFolder).asInstanceOf[Seq[BookmarkEntry]]
     }
@@ -176,20 +190,6 @@ package org.demiurgo.operalink {
 
     def getBookmark(id: String): BookmarkEntry = {
       return genericGetRequest("bookmark", "", Some(id)).asInstanceOf[Seq[BookmarkEntry]](0)
-    }
-
-    def genericPostRequest(dataType: String,
-                           properties: Map[String, String],
-                           itemId: Option[String] = None): Seq[LinkAPIItem] = {
-      var itemIdString = itemId match {
-        case Some(id) => id
-        case None     => ""
-      }
-      val json = serverProxy.post("/rest/" + dataType +
-                                    "/" + itemIdString,
-                                  properties)
-      return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
-             yield LinkAPIItem.fromJsonObject(item.asInstanceOf[JSONObject])
     }
 
     def createBookmarkGeneric(properties: Map[String, String]): BookmarkEntry = {
