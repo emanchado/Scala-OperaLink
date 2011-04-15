@@ -15,6 +15,7 @@ package org.demiurgo.operalink {
   object LinkAPIItem {
     def fromJsonObject(jsonObject: JSONObject): LinkAPIItem = {
       return jsonObject.obj.asInstanceOf[Map[String, String]]("item_type") match {
+        case "speeddial" => new SpeedDialSlot(jsonObject)
         case "bookmark" => new Bookmark(jsonObject)
         case "bookmark_folder" => new BookmarkFolder(jsonObject)
         case "bookmark_separator" => new BookmarkSeparator(jsonObject)
@@ -121,28 +122,26 @@ package org.demiurgo.operalink {
     var serverProxy = new LinkServerProxy(consumer, accessToken)
 
     def getSpeedDial: Seq[SpeedDialSlot] = {
-      val json = serverProxy.get("/rest/speeddial/children")
-      return for { item <- JSON.parseRaw(json).get.asInstanceOf[JSONArray].list }
-             yield new SpeedDialSlot(item.asInstanceOf[JSONObject])
+      return genericGetRequest("speeddial", "children").asInstanceOf[Seq[SpeedDialSlot]]
     }
 
     def getSpeedDialSlot(position: Int): SpeedDialSlot = {
-      val json = serverProxy.get("/rest/speeddial/" + position)
-      return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+      return genericGetRequest("speeddial", "", Some(position.toString)).asInstanceOf[Seq[SpeedDialSlot]](0)
     }
 
     def createSpeedDialSlot(position: Int,
                             properties: Map[String, String]): SpeedDialSlot = {
-      val json = serverProxy.post("/rest/speeddial/" + position, properties)
-      return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+      return genericPostRequest("speeddial", properties,
+                                Some(position.toString))(0).
+              asInstanceOf[SpeedDialSlot]
     }
 
     def updateSpeedDialSlot(position: Int,
                             properties: Map[String, String]): SpeedDialSlot = {
-      val json =
-        serverProxy.post("/rest/speeddial/" + position,
-                         properties ++ Map("api_method" -> "update"))
-      return new SpeedDialSlot(JSON.parseRaw(json).get.asInstanceOf[JSONArray].list(0).asInstanceOf[JSONObject])
+      return genericPostRequest("speeddial",
+                                properties ++ Map("api_method" -> "update"),
+                                Some(position.toString))(0).
+              asInstanceOf[SpeedDialSlot]
     }
 
     def deleteSpeedDialSlot(position: Int) {
