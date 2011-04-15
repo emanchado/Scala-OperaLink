@@ -22,6 +22,7 @@ package org.demiurgo.operalink {
         case "note" => new Note(jsonObject)
         case "note_folder" => new NoteFolder(jsonObject)
         case "note_separator" => new NoteSeparator(jsonObject)
+        case "urlfilter" => new UrlFilter(jsonObject)
       }
     }
   }
@@ -115,6 +116,16 @@ package org.demiurgo.operalink {
     def propertyList: Array[String] = {
       return Array()
     }
+  }
+
+
+  class UrlFilter(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+    def propertyList: Array[String] = {
+      return Array("content", "type")
+    }
+
+    def content: String = propertyHash("content")
+    def filterType: String = propertyHash("type")
   }
 
 
@@ -335,6 +346,32 @@ package org.demiurgo.operalink {
 
     def moveNoteAfter(id: String, folderId: String): NoteEntry = {
       return moveNoteGeneric(id, folderId, "after")
+    }
+
+    def getUrlFilters(): Seq[UrlFilter] = {
+      return genericGetRequest("urlfilter", "children").
+              asInstanceOf[Seq[UrlFilter]]
+    }
+
+    def getUrlFilter(id: String): UrlFilter = {
+      return genericGetRequest("urlfilter", "", Some(id))(0).
+              asInstanceOf[UrlFilter]
+    }
+
+    def updateUrlFilter(id: String,
+                        properties: Map[String, String]): UrlFilter = {
+      return genericPostRequest("urlfilter",
+                                properties ++ Map("api_method" -> "update"),
+                                Some(id))(0).
+              asInstanceOf[UrlFilter]
+    }
+
+    def deleteUrlFilter(id: String) {
+      val response =
+        serverProxy.post("/rest/urlfilter/" + id, Map("api_method" -> "delete"))
+      if (response != "") {
+        throw new Exception("Error deleting urlfilter " + id)
+      }
     }
   }
 }

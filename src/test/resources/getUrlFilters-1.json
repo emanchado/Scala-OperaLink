@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/urlfilter/children",
+    "response": "[{\"item_type\": \"urlfilter\", \"id\": \"abc123\", \"properties\": {\"content\": \"http://ads.example.com/*\", \"type\": \"exclude\"}}, {\"item_type\": \"urlfilter\", \"id\": \"abc456\", \"properties\": {\"content\": \"http://www.evilcorp.com/ads/*\", \"type\": \"exclude\"}}, {\"item_type\": \"urlfilter\", \"id\": \"abc789\", \"properties\": {\"content\": \"*\", \"type\": \"include\"}}]"
+  }
+]

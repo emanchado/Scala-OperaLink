@@ -1,0 +1,8 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/urlfilter/abc123",
+    "params": { "api_method": "delete" },
+    "response": ""
+  }
+]

@@ -545,4 +545,50 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     note.id should equal("abc789")
     note.content should not equal("")
   }
+
+  it should "properly get the list of urlfilters" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getUrlFilters-1")
+    val filters = api.getUrlFilters()
+    filters.length should equal(3)
+    filters(0).id should equal("abc123")
+    filters(0).content should equal("http://ads.example.com/*")
+    filters(0).filterType should equal("exclude")
+    filters(1).id should equal("abc456")
+    filters(1).content should equal("http://www.evilcorp.com/ads/*")
+    filters(1).filterType should equal("exclude")
+    filters(2).id should equal("abc789")
+    filters(2).content should equal("*")
+    filters(2).filterType should equal("include")
+  }
+
+  it should "properly get a urlfilter" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getUrlFilter-1")
+    val filter = api.getUrlFilter("abc123")
+    filter.id should equal("abc123")
+    filter.content should equal("http://ads.example.com/*")
+    filter.filterType should equal("exclude")
+  }
+
+  it should "properly update a urlfilter" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "updateUrlFilter-1")
+    val filter = api.updateUrlFilter("abc123",
+                                     Map("content" ->
+                                           "http://*.evilcorp.com/*"))
+    filter.id should equal("abc123")
+    filter.content should equal("http://*.evilcorp.com/*")
+    filter.filterType should equal("exclude")
+  }
+
+  it should "properly delete a urlfilter" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "deleteUrlFilter-1")
+    api.deleteUrlFilter("abc123")
+  }
 }

@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/urlfilter/abc123/",
+    "response": "[{\"item_type\": \"urlfilter\", \"id\": \"abc123\", \"properties\": {\"content\": \"http://ads.example.com/*\", \"type\": \"exclude\"}}]"
+  }
+]

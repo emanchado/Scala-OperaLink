@@ -1,0 +1,9 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/urlfilter/abc123",
+    "params": { "content":    "http://*.evilcorp.com/*",
+                "api_method": "update" },
+    "response": "[{\"item_type\": \"urlfilter\", \"id\": \"abc123\", \"properties\": {\"content\": \"http://*.evilcorp.com/*\", \"type\": \"exclude\"}}]"
+  }
+]
