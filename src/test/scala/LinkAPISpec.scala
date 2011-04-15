@@ -523,8 +523,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "moveNote-1")
-    val note = api.moveNoteInto("abc789",
-                                        "def123").asInstanceOf[Note]
+    val note = api.moveNoteInto("abc789", "def123").asInstanceOf[Note]
     note.id should equal("abc789")
     note.content should not equal("")
   }
@@ -533,8 +532,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "moveNote-2")
-    val note = api.moveNoteBefore("abc789",
-                                          "def123").asInstanceOf[Note]
+    val note = api.moveNoteBefore("abc789", "def123").asInstanceOf[Note]
     note.id should equal("abc789")
     note.content should not equal("")
   }
@@ -543,8 +541,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
                                               "moveNote-3")
-    val note = api.moveNoteAfter("abc789",
-                                         "def123").asInstanceOf[Note]
+    val note = api.moveNoteAfter("abc789", "def123").asInstanceOf[Note]
     note.id should equal("abc789")
     note.content should not equal("")
   }
