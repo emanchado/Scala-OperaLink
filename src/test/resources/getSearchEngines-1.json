@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/search_engine/children",
+    "response": "[{\"item_type\": \"search_engine\", \"id\": \"438F1230685A11E09B6BB5FEF7932261\", \"properties\": {\"encoding\": \"utf-8\", \"show_in_personal_bar\": false, \"is_post\": false, \"title\": \"Uncyclopedia\", \"uri\": \"http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go\", \"key\": \"u\", \"personal_bar_pos\": -1}}, {\"item_type\": \"search_engine\", \"id\": \"1E4C9490DA2311DFB66C91ED324A295A\", \"properties\": {\"encoding\": \"UTF-8\", \"show_in_personal_bar\": false, \"is_post\": false, \"title\": \"EmacsWiki\", \"uri\": \"http://www.google.com/cse?cx=004774160799092323420%3A6-ff2s0o6yi&q=%s&sa=Search&siteurl=emacswiki.org%2F\", \"key\": \"ew\", \"personal_bar_pos\": -1, \"icon\": \"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAUklEQVR42mNgGAXYwH8CmDgNv/ZIoGBCBoI5yADZEGxy6K6BSy5TZABjZIUwEDHFCYyR5FANgGnGZgBMM80MYMDjT1xhQDAKGXCw/5OaJoY7AAAmQczKtYskmgAAAABJRU5ErkJggg==\"}}]"
+  }
+]

@@ -591,4 +591,26 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
                                               "deleteUrlFilter-1")
     api.deleteUrlFilter("abc123")
   }
+
+  it should "properly get all search engines" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getSearchEngines-1")
+    val engines = api.getSearchEngines()
+    engines.length should equal(2)
+    engines(0).id should equal("438F1230685A11E09B6BB5FEF7932261")
+    engines(0).title should equal("Uncyclopedia")
+    engines(0).uri should equal("http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go")
+    engines(0).isPost should equal(false)
+    engines(0).key should equal("u")
+    engines(0).showInPersonalBar should equal(false)
+    engines(1).id should equal("1E4C9490DA2311DFB66C91ED324A295A")
+    engines(1).title should equal("EmacsWiki")
+    engines(1).uri should equal("http://www.google.com/cse?cx=004774160799092323420%3A6-ff2s0o6yi&q=%s&sa=Search&siteurl=emacswiki.org%2F")
+    engines(1).isPost should equal(false)
+    engines(1).key should equal("ew")
+    engines(1).showInPersonalBar should equal(false)
+    val iconBytes = Array(-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 16, 0, 0, 0, 16, 8, 6, 0, 0, 0, 31, -13, -1, 97, 0, 0, 0, 82, 73, 68, 65, 84, 120, -38, 99, 96, 24, 5, -40, -64, 127, 2, -104, 56, 13, -65, -10, 72, -96, 96, 66, 6, -126, 57, -56, 0, -39, 16, 108, 114, -24, -82, -127, 75, 46, 83, 100, 0, 99, 100, -123, 48, 16, 49, -59, 9, -116, -111, -28, 80, 13, -128, 105, -58, 102, 0, 76, 51, -51, 12, 96, -64, -29, 79, 92, 97, 64, 48, 10, 25, 112, -80, -1, -109, -102, 38, -122, 59, 0, 0, 38, 65, -52, -54, -75, -117, 36, -102, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126)
+    engines(1).icon should equal(iconBytes)
+  }
 }

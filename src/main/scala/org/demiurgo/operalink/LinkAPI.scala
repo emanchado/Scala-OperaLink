@@ -1,5 +1,6 @@
 import scalaj.http.{Http, Token}
 import scala.util.parsing.json.{JSON, JSONObject, JSONArray}
+import org.apache.commons.codec.binary.Base64
 import org.demiurgo.operalink.LinkServerProxy
 
 package org.demiurgo.operalink {
@@ -23,6 +24,7 @@ package org.demiurgo.operalink {
         case "note_folder" => new NoteFolder(jsonObject)
         case "note_separator" => new NoteSeparator(jsonObject)
         case "urlfilter" => new UrlFilter(jsonObject)
+        case "search_engine" => new SearchEngine(jsonObject)
       }
     }
   }
@@ -126,6 +128,20 @@ package org.demiurgo.operalink {
 
     def content: String = propertyHash("content")
     def filterType: String = propertyHash("type")
+  }
+
+
+  class SearchEngine(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+    def propertyList: Array[String] = {
+      return Array("title", "key", "icon")
+    }
+
+    def title: String = propertyHash("title")
+    def uri: String = propertyHash("uri")
+    def key: String = propertyHash("key")
+    def isPost: Boolean = if (propertyHash("is_post") == "1") true else false
+    def showInPersonalBar: Boolean = if (propertyHash("show_in_personal_bar") == "1") true else false
+    def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
   }
 
 
@@ -372,6 +388,11 @@ package org.demiurgo.operalink {
       if (response != "") {
         throw new Exception("Error deleting urlfilter " + id)
       }
+    }
+
+    def getSearchEngines(): Seq[SearchEngine] = {
+      return genericGetRequest("search_engine", "children").
+              asInstanceOf[Seq[SearchEngine]]
     }
   }
 }
