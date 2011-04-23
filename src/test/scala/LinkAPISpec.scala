@@ -207,6 +207,27 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmark_separator.id should equal("abc789")
   }
 
+  it should "correctly tell apart target folders from regular bookmark folders" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getBookmark-4")
+    val folders = api.getBookmarks().asInstanceOf[Seq[BookmarkFolder]]
+    folders(0).id should equal("abc123")
+    folders(0).target should equal("mini")
+    folders(0).isTargetFolder should equal(true)
+    folders(1).id should equal("abc456")
+    folders(1).target should equal("")
+    folders(1).isTargetFolder should equal(false)
+
+    val targetBookmarkFolder = api.getBookmark("abc123").asInstanceOf[BookmarkFolder]
+    targetBookmarkFolder.id should equal("abc123")
+    targetBookmarkFolder.target should equal("mini")
+
+    val bookmarkFolder = api.getBookmark("abc456").asInstanceOf[BookmarkFolder]
+    bookmarkFolder.id should equal("abc456")
+    bookmarkFolder.target should equal("")
+  }
+
   it should "create a new bookmark properly" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,

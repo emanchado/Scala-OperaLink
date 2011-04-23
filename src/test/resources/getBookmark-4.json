@@ -1,0 +1,17 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/bookmark/children",
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"abc123\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"title\": \"Opera Mini\", \"target\": \"mini\", \"personal_bar_pos\": 5}, \"children\": []}, {\"item_type\": \"bookmark_folder\", \"id\": \"abc456\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"title\": \"Normal Folder\", \"personal_bar_pos\": 5}, \"children\": []}]"
+  },
+  {
+    "method": "get",
+    "path": "/rest/bookmark/abc123/",
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"abc123\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"title\": \"Opera Mini\", \"target\": \"mini\", \"personal_bar_pos\": 5}, \"children\": []}]"
+  },
+  {
+    "method": "get",
+    "path": "/rest/bookmark/abc456/",
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"abc456\", \"properties\": {\"created\": \"2011-03-19T16:28:12Z\", \"show_in_personal_bar\": true, \"title\": \"Normal Folder\", \"personal_bar_pos\": 5}, \"children\": []}]"
+  }
+]
