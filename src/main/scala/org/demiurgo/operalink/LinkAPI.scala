@@ -394,5 +394,27 @@ package org.demiurgo.operalink {
       return genericGetRequest("search_engine", "children").
               asInstanceOf[Seq[SearchEngine]]
     }
+
+    def getSearchEngine(id: String): SearchEngine = {
+      return genericGetRequest("search_engine", "", Some(id))(0).
+              asInstanceOf[SearchEngine]
+    }
+
+    def updateSearchEngine(id: String,
+                           properties: Map[String, String]): SearchEngine = {
+      return genericPostRequest("search_engine",
+                                properties ++ Map("api_method" -> "update"),
+                                Some(id))(0).
+              asInstanceOf[SearchEngine]
+    }
+
+    def deleteSearchEngine(id: String) {
+      val response =
+        serverProxy.post("/rest/search_engine/" + id,
+                         Map("api_method" -> "delete"))
+      if (response != "") {
+        throw new Exception("Error deleting search engine " + id)
+      }
+    }
   }
 }

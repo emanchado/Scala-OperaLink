@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/search_engine/438F1230685A11E09B6BB5FEF7932261/",
+    "response": "[{\"item_type\": \"search_engine\", \"id\": \"438F1230685A11E09B6BB5FEF7932261\", \"properties\": {\"encoding\": \"utf-8\", \"show_in_personal_bar\": false, \"is_post\": false, \"title\": \"Uncyclopedia\", \"uri\": \"http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go\", \"key\": \"u\", \"personal_bar_pos\": -1}}]"
+  }
+]

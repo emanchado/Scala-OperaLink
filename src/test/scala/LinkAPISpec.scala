@@ -613,4 +613,38 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     val iconBytes = Array(-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 16, 0, 0, 0, 16, 8, 6, 0, 0, 0, 31, -13, -1, 97, 0, 0, 0, 82, 73, 68, 65, 84, 120, -38, 99, 96, 24, 5, -40, -64, 127, 2, -104, 56, 13, -65, -10, 72, -96, 96, 66, 6, -126, 57, -56, 0, -39, 16, 108, 114, -24, -82, -127, 75, 46, 83, 100, 0, 99, 100, -123, 48, 16, 49, -59, 9, -116, -111, -28, 80, 13, -128, 105, -58, 102, 0, 76, 51, -51, 12, 96, -64, -29, 79, 92, 97, 64, 48, 10, 25, 112, -80, -1, -109, -102, 38, -122, 59, 0, 0, 38, 65, -52, -54, -75, -117, 36, -102, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126)
     engines(1).icon should equal(iconBytes)
   }
+
+  it should "properly get one search engine" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getSearchEngine-1")
+    val engine = api.getSearchEngine("438F1230685A11E09B6BB5FEF7932261")
+    engine.id should equal("438F1230685A11E09B6BB5FEF7932261")
+    engine.title should equal("Uncyclopedia")
+    engine.uri should equal("http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go")
+    engine.isPost should equal(false)
+    engine.key should equal("u")
+    engine.showInPersonalBar should equal(false)
+  }
+
+  it should "properly update a search engine" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "updateSearchEngine-1")
+    val engine = api.updateSearchEngine("438F1230685A11E09B6BB5FEF7932261",
+                                        Map("title" -> "Uncyclopedia"))
+    engine.id should equal("438F1230685A11E09B6BB5FEF7932261")
+    engine.title should equal("Uncyclopedia")
+    engine.uri should equal("http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go")
+    engine.isPost should equal(false)
+    engine.key should equal("u")
+    engine.showInPersonalBar should equal(false)
+  }
+
+  it should "properly delete a search engine" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "deleteSearchEngine-1")
+    api.deleteSearchEngine("438F1230685A11E09B6BB5FEF7932261")
+  }
 }

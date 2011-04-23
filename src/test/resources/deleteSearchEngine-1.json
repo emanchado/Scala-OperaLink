@@ -1,0 +1,8 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/search_engine/438F1230685A11E09B6BB5FEF7932261",
+    "params": { "api_method": "delete" },
+    "response": ""
+  }
+]
