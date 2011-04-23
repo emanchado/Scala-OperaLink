@@ -648,6 +648,21 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engine.showInPersonalBar should equal(false)
   }
 
+  it should "properly recognise boolean fields" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getSearchEngine-2")
+    val engine = api.getSearchEngine("CB877760C0C411DF8F9AC996B55E7F5D")
+    engine.id should equal("CB877760C0C411DF8F9AC996B55E7F5D")
+    engine.isPost should equal(true)
+    engine.showInPersonalBar should equal(false)
+
+    val engine2 = api.getSearchEngine("438F1230685A11E09B6BB5FEF7932261")
+    engine2.id should equal("438F1230685A11E09B6BB5FEF7932261")
+    engine2.isPost should equal(false)
+    engine2.showInPersonalBar should equal(true)
+  }
+
   it should "properly update a search engine" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,

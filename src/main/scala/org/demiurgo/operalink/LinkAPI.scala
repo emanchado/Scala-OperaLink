@@ -141,8 +141,9 @@ package org.demiurgo.operalink {
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def key: String = propertyHash("key")
-    def isPost: Boolean = if (propertyHash("is_post") == "1") true else false
-    def showInPersonalBar: Boolean = if (propertyHash("show_in_personal_bar") == "1") true else false
+    def isPost: Boolean = propertyHash("is_post").asInstanceOf[Boolean]
+    def postQuery: String = propertyHash("post_query")
+    def showInPersonalBar: Boolean = propertyHash("show_in_personal_bar").asInstanceOf[Boolean]
     def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
   }
 

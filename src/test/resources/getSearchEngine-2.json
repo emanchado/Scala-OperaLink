@@ -1,0 +1,12 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/search_engine/CB877760C0C411DF8F9AC996B55E7F5D/",
+    "response": "[{\"item_type\": \"search_engine\", \"id\": \"CB877760C0C411DF8F9AC996B55E7F5D\", \"properties\": {\"encoding\": \"utf-8\", \"show_in_personal_bar\": false, \"is_post\": true, \"title\": \"Trafikanten | Forsiden\", \"post_query\": \"TypeAsIntAsString=3&MapOption=1&FraSted=%s&FraStedId=0&ForrigeFraSted=&TilSted=&TilStedId=0&ForrigeTilSted=&DayAndMonth=15.09.2010&Klokkeslett=14%3A32&BeforeAfter=etter&AdvancedSearchOptions.CheckBoxBus=True&AdvancedSearchOptions.CheckBoxBus=false&AdvancedSearchOptions.CheckBoxBoat=True&AdvancedSearchOptions.CheckBoxBoat=false&AdvancedSearchOptions.CheckBoxAirportBus=True&AdvancedSearchOptions.CheckBoxAirportBus=false&AdvancedSearchOptions.CheckBoxAirportTrain=True&AdvancedSearchOptions.CheckBoxAirportTrain=false&AdvancedSearchOptions.CheckBoxTram=True&AdvancedSearchOptions.CheckBoxTram=false&AdvancedSearchOptions.CheckBoxMetro=True&AdvancedSearchOptions.CheckBoxMetro=false&AdvancedSearchOptions.CheckBoxTrain=True&AdvancedSearchOptions.CheckBoxTrain=false&AdvancedSearchOptions.LineFilter1=&AdvancedSearchOptions.LineFilter2=&AdvancedSearchOptions.LineFilter3=&AdvancedSearchOptions.LineFilter4=&AdvancedSearchOptions.PreferDirect=False&AdvancedSearchOptions.MinimumSwitchTime=2&AdvancedSearchOptions.MaximumWalkingTime=1400\", \"uri\": \"http://reiseplanlegger.trafikanten.no/no\", \"key\": \"tk\", \"personal_bar_pos\": -1}}]"
+  },
+  {
+    "method": "get",
+    "path": "/rest/search_engine/438F1230685A11E09B6BB5FEF7932261/",
+    "response": "[{\"item_type\": \"search_engine\", \"id\": \"438F1230685A11E09B6BB5FEF7932261\", \"properties\": {\"encoding\": \"utf-8\", \"show_in_personal_bar\": true, \"is_post\": false, \"title\": \"Uncyclopedia\", \"uri\": \"http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go\", \"key\": \"u\", \"personal_bar_pos\": 1}}]"
+  }
+]
