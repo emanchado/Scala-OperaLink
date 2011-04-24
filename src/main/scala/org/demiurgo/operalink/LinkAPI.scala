@@ -145,6 +145,16 @@ package org.demiurgo.operalink {
     def postQuery: String = propertyHash("post_query")
     def showInPersonalBar: Boolean = propertyHash("show_in_personal_bar").asInstanceOf[Boolean]
     def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
+    def baseUri: String = { return uri.split("\\?")(0) }
+    def params: Map[String, String] = {
+      val paramString = if (isPost) postQuery else uri.split("\\?")(1)
+      var p = Map[String, String]()
+      for (param <- paramString.split("&")) {
+        val varValuePair = param.split("=")
+        p = p.updated(varValuePair(0), varValuePair(1))
+      }
+      return p
+    }
   }
 
 

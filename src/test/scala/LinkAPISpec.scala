@@ -663,6 +663,30 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engine2.showInPersonalBar should equal(true)
   }
 
+  it should "properly split form parameters" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getSearchEngine-3")
+    val engine = api.getSearchEngine("D67C6EC0901B11DFA617C412E565720D")
+    engine.id should equal("D67C6EC0901B11DFA617C412E565720D")
+    engine.isPost should equal(true)
+    engine.baseUri should equal("http://www.wikidioms.com/")
+    engine.params should equal(Map("search_keywords" -> "%s",
+                                   "search_within"   -> "0",
+                                   "op"              -> "Search",
+                                   "form_build_id"   ->
+                                     "form-1acd210b990803618c2ee090bc288417",
+                                   "form_id"         -> "get_search_form"))
+
+    val engine2 = api.getSearchEngine("438F1230685A11E09B6BB5FEF7932261")
+    engine2.id should equal("438F1230685A11E09B6BB5FEF7932261")
+    engine2.isPost should equal(false)
+    engine2.baseUri should equal("http://uncyclopedia.wikia.com/index.php")
+    engine2.params should equal(Map("title"  -> "Special%3ASearch",
+                                    "search" -> "%s",
+                                    "go"     -> "Go"))
+  }
+
   it should "properly update a search engine" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
