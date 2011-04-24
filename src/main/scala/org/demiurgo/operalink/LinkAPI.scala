@@ -8,6 +8,10 @@ package org.demiurgo.operalink {
     val propertyHash = propertySet.obj("properties").asInstanceOf[JSONObject].obj.asInstanceOf[Map[String, String]]
     val baseHash = propertySet.obj.asInstanceOf[Map[String, String]]
 
+    def prop(name: String): String = propertyHash(name)
+    def prop(name: String, default: String): String = {
+      propertyHash.getOrElse(name, default)
+    }
     def id: String = baseHash("id")
     def itemType: String = baseHash("item_type")
   }
@@ -28,16 +32,21 @@ package org.demiurgo.operalink {
     }
   }
 
-  class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+  trait WithIcon {
+    def prop(name: String): String
+    def prop(name: String, default: String): String
+
+    def icon: Array[Byte] = Base64.decodeBase64(prop("icon"))
+    def rawIcon: String = prop("icon", "")
+  }
+
+  class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) with WithIcon {
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def position: String = id
-    def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
     def reloadInterval: Int = propertyHash("reload_interval").asInstanceOf[Double].intValue
     def reloadEnabled: Boolean = propertyHash("reload_enabled").asInstanceOf[Boolean]
     def reloadOnlyIfExpired: Boolean = propertyHash("reload_only_if_expired").asInstanceOf[Boolean]
-
-    def rawIcon: String = propertyHash.getOrElse("icon", "")
   }
 
 
@@ -45,16 +54,13 @@ package org.demiurgo.operalink {
   }
 
 
-  class Bookmark(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
+  class Bookmark(propertySet: JSONObject) extends BookmarkEntry(propertySet) with WithIcon {
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def description: String = propertyHash("description")
     def nickname: String = propertyHash("nickname")
-    def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
     def created: String = propertyHash("created")
     def visited: String = propertyHash("visited")
-
-    def rawIcon: String = propertyHash.getOrElse("icon", "")
   }
 
 
@@ -118,19 +124,17 @@ package org.demiurgo.operalink {
   }
 
 
-  class SearchEngine(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+  class SearchEngine(propertySet: JSONObject) extends LinkAPIItem(propertySet) with WithIcon {
     def key: String = propertyHash("key")
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def encoding: String = propertyHash("encoding")
     def isPost: Boolean = propertyHash("is_post").asInstanceOf[Boolean]
     def postQuery: String = propertyHash.getOrElse("post_query", "")
-    def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
     def showInPersonalBar: Boolean = propertyHash("show_in_personal_bar").asInstanceOf[Boolean]
     def personalBarPosition: Int = propertyHash("personal_bar_pos").asInstanceOf[Double].intValue
 
     def baseUri: String = { return uri.split("\\?")(0) }
-    def rawIcon: String = propertyHash.getOrElse("icon", "")
     def params: Map[String, String] = {
       var paramString = postQuery
       if (! isPost) {
