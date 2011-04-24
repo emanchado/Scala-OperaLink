@@ -654,6 +654,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engines(0).isPost should equal(false)
     engines(0).key should equal("u")
     engines(0).showInPersonalBar should equal(false)
+    engines(0).rawIcon should equal("")
     engines(1).id should equal("1E4C9490DA2311DFB66C91ED324A295A")
     engines(1).title should equal("EmacsWiki")
     engines(1).uri should equal("http://www.google.com/cse?cx=004774160799092323420%3A6-ff2s0o6yi&q=%s&sa=Search&siteurl=emacswiki.org%2F")
@@ -662,6 +663,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engines(1).showInPersonalBar should equal(false)
     val iconBytes = Array(-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 16, 0, 0, 0, 16, 8, 6, 0, 0, 0, 31, -13, -1, 97, 0, 0, 0, 82, 73, 68, 65, 84, 120, -38, 99, 96, 24, 5, -40, -64, 127, 2, -104, 56, 13, -65, -10, 72, -96, 96, 66, 6, -126, 57, -56, 0, -39, 16, 108, 114, -24, -82, -127, 75, 46, 83, 100, 0, 99, 100, -123, 48, 16, 49, -59, 9, -116, -111, -28, 80, 13, -128, 105, -58, 102, 0, 76, 51, -51, 12, 96, -64, -29, 79, 92, 97, 64, 48, 10, 25, 112, -80, -1, -109, -102, 38, -122, 59, 0, 0, 38, 65, -52, -54, -75, -117, 36, -102, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126)
     engines(1).icon should equal(iconBytes)
+    engines(1).rawIcon should equal("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAUklEQVR42mNgGAXYwH8CmDgNv/ZIoGBCBoI5yADZEGxy6K6BSy5TZABjZIUwEDHFCYyR5FANgGnGZgBMM80MYMDjT1xhQDAKGXCw/5OaJoY7AAAmQczKtYskmgAAAABJRU5ErkJggg==")
   }
 
   it should "properly get one search engine" in {

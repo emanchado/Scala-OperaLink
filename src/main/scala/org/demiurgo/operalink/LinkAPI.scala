@@ -36,6 +36,8 @@ package org.demiurgo.operalink {
     def reloadInterval: Int = propertyHash("reload_interval").asInstanceOf[Double].intValue
     def reloadEnabled: Boolean = propertyHash("reload_enabled").asInstanceOf[Boolean]
     def reloadOnlyIfExpired: Boolean = propertyHash("reload_only_if_expired").asInstanceOf[Boolean]
+
+    def rawIcon: String = propertyHash.getOrElse("icon", "")
   }
 
 
@@ -51,6 +53,8 @@ package org.demiurgo.operalink {
     def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
     def created: String = propertyHash("created")
     def visited: String = propertyHash("visited")
+
+    def rawIcon: String = propertyHash.getOrElse("icon", "")
   }
 
 
@@ -126,6 +130,7 @@ package org.demiurgo.operalink {
     def personalBarPosition: Int = propertyHash("personal_bar_pos").asInstanceOf[Double].intValue
 
     def baseUri: String = { return uri.split("\\?")(0) }
+    def rawIcon: String = propertyHash.getOrElse("icon", "")
     def params: Map[String, String] = {
       var paramString = postQuery
       if (! isPost) {
