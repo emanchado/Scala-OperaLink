@@ -19,12 +19,16 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     speedDials(0).id should equal("1")
     speedDials(0).uri should equal("http://redir.opera.com/speeddials/portal/")
     speedDials(0).title should equal("Opera Portal beta")
-    speedDials(0).reloadEnabled should equal("0")
+    speedDials(0).reloadInterval should equal(2147483646)
+    speedDials(0).reloadEnabled should equal(false)
+    speedDials(0).reloadOnlyIfExpired should equal(false)
 
     speedDials(1).id should equal("3")
     speedDials(1).uri should equal("http://redir.opera.com/speeddials/myopera/")
     speedDials(1).title should equal("My Opera")
-    speedDials(1).reloadEnabled should equal("0")
+    speedDials(1).reloadInterval should equal(3600)
+    speedDials(1).reloadEnabled should equal(true)
+    speedDials(1).reloadOnlyIfExpired should equal(true)
   }
 
   it should "correctly ask for a single Speed Dial slot" in {
@@ -36,7 +40,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     speedDial.id should equal("1")
     speedDial.uri should equal("http://redir.opera.com/speeddials/portal/")
     speedDial.title should equal("Opera Portal beta")
-    speedDial.reloadEnabled should equal("0")
+    speedDial.reloadEnabled should equal(false)
   }
 
   it should "correctly create a new Speed Dial" in {
@@ -188,6 +192,8 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     bookmark.id should equal("abc123")
     bookmark.title should equal("HCoder.org")
     bookmark.uri should equal("http://hcoder.org")
+    bookmark.created should equal("2011-03-19T16:28:12Z")
+    bookmark.visited should equal("2011-04-14T12:03:27Z")
   }
 
   it should "correctly ask for a single bookmark folder" in {
@@ -226,6 +232,29 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     val bookmarkFolder = api.getBookmark("abc456").asInstanceOf[BookmarkFolder]
     bookmarkFolder.id should equal("abc456")
     bookmarkFolder.target should equal("")
+  }
+
+  it should "correctly tell apart trash folders from regular bookmark folders" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getBookmark-5")
+    val folders = api.getBookmarks().asInstanceOf[Seq[BookmarkFolder]]
+    folders(0).id should equal("abc123")
+    folders(0).folderType should equal("")
+    folders(0).isTrashFolder should equal(false)
+    folders(1).id should equal("abc456")
+    folders(1).folderType should equal("trash")
+    folders(1).isTrashFolder should equal(true)
+
+    val bookmarkFolder = api.getBookmark("abc123").asInstanceOf[BookmarkFolder]
+    bookmarkFolder.id should equal("abc123")
+    bookmarkFolder.folderType should equal("")
+    bookmarkFolder.isTrashFolder should equal(false)
+
+    val trashFolder = api.getBookmark("abc456").asInstanceOf[BookmarkFolder]
+    trashFolder.id should equal("abc456")
+    trashFolder.folderType should equal("trash")
+    trashFolder.isTrashFolder should equal(true)
   }
 
   it should "create a new bookmark properly" in {
@@ -646,6 +675,7 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engine.isPost should equal(false)
     engine.key should equal("u")
     engine.showInPersonalBar should equal(false)
+    engine.encoding should equal("utf-8")
   }
 
   it should "properly recognise boolean fields" in {

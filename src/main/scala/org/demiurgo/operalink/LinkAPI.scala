@@ -10,7 +10,6 @@ package org.demiurgo.operalink {
 
     def id: String = baseHash("id")
     def itemType: String = baseHash("item_type")
-    def propertyList: Array[String]
   }
 
   object LinkAPIItem {
@@ -30,16 +29,13 @@ package org.demiurgo.operalink {
   }
 
   class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
-    def position: String = id
-    def propertyList: Array[String] = {
-      return Array("uri", "title", "reload_interval", "reload_enabled",
-                   "reload_only_if_expired")
-    }
-    def uri: String = propertyHash("uri")
     def title: String = propertyHash("title")
-    def reloadInterval: String = propertyHash("reload_interval")
-    def reloadEnabled: String = propertyHash("reload_enabled")
-    def reloadOnlyIfExpired: String = propertyHash("reload_only_if_expired")
+    def uri: String = propertyHash("uri")
+    def position: String = id
+    def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
+    def reloadInterval: Int = propertyHash("reload_interval").asInstanceOf[Double].intValue
+    def reloadEnabled: Boolean = propertyHash("reload_enabled").asInstanceOf[Boolean]
+    def reloadOnlyIfExpired: Boolean = propertyHash("reload_only_if_expired").asInstanceOf[Boolean]
   }
 
 
@@ -48,30 +44,28 @@ package org.demiurgo.operalink {
 
 
   class Bookmark(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
-    def propertyList: Array[String] = {
-      return Array("uri", "title", "description", "nickname",
-                   "icon", "created", "visited")
-    }
-
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def description: String = propertyHash("description")
     def nickname: String = propertyHash("nickname")
-    def icon: String = propertyHash("icon")
+    def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
+    def created: String = propertyHash("created")
+    def visited: String = propertyHash("visited")
   }
 
 
   class BookmarkFolder(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
     val childrenList = propertySet.obj("children").asInstanceOf[JSONArray].list.asInstanceOf[Seq[JSONObject]]
-    def propertyList: Array[String] = {
-      return Array("title", "description", "nickname",
-                   "type", "target")
-    }
 
     def title: String = propertyHash("title")
+    def description: String = propertyHash("description")
     def nickname: String = propertyHash("nickname")
+    def folderType: String = propertyHash.getOrElse("type", "")
     def target: String = propertyHash.getOrElse("target", "")
-    def isTargetFolder: Boolean = if (propertyHash.getOrElse("target", "") == "") false else true
+    def created: String = propertyHash("created")
+
+    def isTrashFolder: Boolean = if (folderType == "trash") true else false
+    def isTargetFolder: Boolean = if (target == "") false else true
     def contents: Seq[BookmarkEntry] = {
       return for { entry <- childrenList }
                  yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[BookmarkEntry]
@@ -80,9 +74,6 @@ package org.demiurgo.operalink {
 
 
   class BookmarkSeparator(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
-    def propertyList: Array[String] = {
-      return Array()
-    }
   }
 
 
@@ -91,24 +82,21 @@ package org.demiurgo.operalink {
 
 
   class Note(propertySet: JSONObject) extends NoteEntry(propertySet) {
-    def propertyList: Array[String] = {
-      return Array("uri", "content", "created")
-    }
-
     def content: String = propertyHash("content")
-    def uri: String = propertyHash.getOrElse("uri", "")
     def created: String = propertyHash("created")
+    def uri: String = propertyHash.getOrElse("uri", "")
   }
 
 
   class NoteFolder(propertySet: JSONObject) extends NoteEntry(propertySet) {
     val childrenList = propertySet.obj("children").asInstanceOf[JSONArray].list.asInstanceOf[Seq[JSONObject]]
-    def propertyList: Array[String] = {
-      return Array("title", "description", "nickname",
-                   "type", "target")
-    }
 
     def title: String = propertyHash("title")
+    def folderType: String = propertyHash.getOrElse("type", "")
+    def target: String = propertyHash.getOrElse("target", "")
+
+    def isTrashFolder: Boolean = if (folderType == "trash") true else false
+    def isTargetFolder: Boolean = if (target == "") false else true
     def contents: Seq[NoteEntry] = {
       return for { entry <- childrenList }
                  yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[NoteEntry]
@@ -117,34 +105,26 @@ package org.demiurgo.operalink {
 
 
   class NoteSeparator(propertySet: JSONObject) extends NoteEntry(propertySet) {
-    def propertyList: Array[String] = {
-      return Array()
-    }
   }
 
 
   class UrlFilter(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
-    def propertyList: Array[String] = {
-      return Array("content", "type")
-    }
-
     def content: String = propertyHash("content")
     def filterType: String = propertyHash("type")
   }
 
 
   class SearchEngine(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
-    def propertyList: Array[String] = {
-      return Array("title", "key", "icon")
-    }
-
+    def key: String = propertyHash("key")
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
-    def key: String = propertyHash("key")
+    def encoding: String = propertyHash("encoding")
     def isPost: Boolean = propertyHash("is_post").asInstanceOf[Boolean]
     def postQuery: String = propertyHash.getOrElse("post_query", "")
-    def showInPersonalBar: Boolean = propertyHash("show_in_personal_bar").asInstanceOf[Boolean]
     def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
+    def showInPersonalBar: Boolean = propertyHash("show_in_personal_bar").asInstanceOf[Boolean]
+    def personalBarPosition: Int = propertyHash("personal_bar_pos").asInstanceOf[Double].intValue
+
     def baseUri: String = { return uri.split("\\?")(0) }
     def params: Map[String, String] = {
       var paramString = postQuery
