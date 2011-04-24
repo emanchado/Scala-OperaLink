@@ -147,11 +147,19 @@ package org.demiurgo.operalink {
     def icon: Array[Byte] = Base64.decodeBase64(propertyHash("icon"))
     def baseUri: String = { return uri.split("\\?")(0) }
     def params: Map[String, String] = {
-      val paramString = if (isPost) postQuery else uri.split("\\?")(1)
+      var paramString = postQuery
+      if (! isPost) {
+        val parts = uri.split("\\?")
+        paramString = if (parts.length > 1) parts(1) else ""
+      }
       var p = Map[String, String]()
       for (param <- paramString.split("&")) {
         val varValuePair = param.split("=")
-        p = p.updated(varValuePair(0), varValuePair(1))
+        if (varValuePair.length > 1) {
+          p = p.updated(varValuePair(0), varValuePair(1))
+        } else if (varValuePair(0) != "") {
+          p = p.updated(varValuePair(0), "")
+        }
       }
       return p
     }

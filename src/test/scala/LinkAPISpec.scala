@@ -685,6 +685,12 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engine2.params should equal(Map("title"  -> "Special%3ASearch",
                                     "search" -> "%s",
                                     "go"     -> "Go"))
+
+    val engine3 = api.getSearchEngine("826799903DFE11E0A4D5D31252A963B4")
+    engine3.id should equal("826799903DFE11E0A4D5D31252A963B4")
+    engine3.isPost should equal(false)
+    engine3.baseUri should equal("http://dictionary.reverso.net/english-spanish/%s")
+    engine3.params should equal(Map[String, String]())
   }
 
   it should "properly update a search engine" in {
