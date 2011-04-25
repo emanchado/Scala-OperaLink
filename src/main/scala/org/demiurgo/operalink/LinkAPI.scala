@@ -139,10 +139,10 @@ package org.demiurgo.operalink {
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def encoding: String = propertyHash("encoding")
-    def isPost: Boolean = propertyHash("is_post").asInstanceOf[Boolean]
+    def isPost: Boolean = propertyHash.getOrElse("is_post", false).asInstanceOf[Boolean]
     def postQuery: String = propertyHash.getOrElse("post_query", "")
-    def showInPersonalBar: Boolean = propertyHash("show_in_personal_bar").asInstanceOf[Boolean]
-    def personalBarPosition: Int = propertyHash("personal_bar_pos").asInstanceOf[Double].intValue
+    def showInPersonalBar: Boolean = propertyHash.getOrElse("show_in_personal_bar", false).asInstanceOf[Boolean]
+    def personalBarPosition: Int = propertyHash.getOrElse("personal_bar_pos", -1).asInstanceOf[Double].intValue
 
     def baseUri: String = { return uri.split("\\?")(0) }
     def params: Map[String, String] = {
@@ -394,6 +394,11 @@ package org.demiurgo.operalink {
               asInstanceOf[UrlFilter]
     }
 
+    def createUrlFilter(properties: Map[String, String]): UrlFilter = {
+      return genericPostRequest("urlfilter", properties, None)(0).
+              asInstanceOf[UrlFilter]
+    }
+
     def updateUrlFilter(id: String,
                         properties: Map[String, String]): UrlFilter = {
       return genericPostRequest("urlfilter",
@@ -417,6 +422,11 @@ package org.demiurgo.operalink {
 
     def getSearchEngine(id: String): SearchEngine = {
       return genericGetRequest("search_engine", "", Some(id))(0).
+              asInstanceOf[SearchEngine]
+    }
+
+    def createSearchEngine(properties: Map[String, String]): SearchEngine = {
+      return genericPostRequest("search_engine", properties)(0).
               asInstanceOf[SearchEngine]
     }
 

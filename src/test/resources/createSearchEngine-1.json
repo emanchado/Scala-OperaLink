@@ -1,0 +1,11 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/search_engine/",
+    "params": { "encoding": "utf-8",
+                "title":    "Uncyclopedia",
+                "key":      "u",
+                "uri":      "http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go" },
+    "response": "[{\"item_type\": \"search_engine\", \"id\": \"438F1230685A11E09B6BB5FEF7932261\", \"properties\": {\"encoding\": \"utf-8\", \"title\": \"Uncyclopedia\", \"uri\": \"http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go\", \"key\": \"u\"}}]"
+  }
+]

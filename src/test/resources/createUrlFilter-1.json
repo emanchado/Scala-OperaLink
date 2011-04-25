@@ -1,0 +1,9 @@
+[
+  {
+    "method": "post",
+    "path": "/rest/urlfilter/",
+    "params": { "content":    "http://ads.example.com/*",
+                "type":       "exclude" },
+    "response": "[{\"item_type\": \"urlfilter\", \"id\": \"abc123\", \"properties\": {\"content\": \"http://ads.example.com/*\", \"type\": \"exclude\"}}]"
+  }
+]

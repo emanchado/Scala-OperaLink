@@ -623,6 +623,17 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     filter.filterType should equal("exclude")
   }
 
+  it should "properly create a urlfilter" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createUrlFilter-1")
+    val properties = Map("type"    -> "exclude",
+                         "content" -> "http://ads.example.com/*")
+    val urlFilter = api.createUrlFilter(properties)
+    urlFilter.content should equal(properties("content"))
+    urlFilter.filterType should equal(properties("type"))
+  }
+
   it should "properly update a urlfilter" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
@@ -723,6 +734,23 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     engine3.isPost should equal(false)
     engine3.baseUri should equal("http://dictionary.reverso.net/english-spanish/%s")
     engine3.params should equal(Map[String, String]())
+  }
+
+  it should "properly create a search engine" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "createSearchEngine-1")
+    val properties = Map("title"    -> "Uncyclopedia",
+                         "key"      -> "u",
+                         "uri"      -> "http://uncyclopedia.wikia.com/index.php?title=Special%3ASearch&search=%s&go=Go",
+                         "encoding" -> "utf-8")
+    val engine = api.createSearchEngine(properties)
+    engine.id should not equal("")
+    engine.title should equal(properties("title"))
+    engine.uri should equal(properties("uri"))
+    engine.key should equal(properties("key"))
+    engine.isPost should equal(false)
+    engine.showInPersonalBar should equal(false)
   }
 
   it should "properly update a search engine" in {
