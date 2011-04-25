@@ -5,7 +5,8 @@ import org.demiurgo.operalink.LinkServerProxy
 
 package org.demiurgo.operalink {
   abstract class LinkAPIItem(propertySet: JSONObject) {
-    val propertyHash = propertySet.obj("properties").asInstanceOf[JSONObject].obj.asInstanceOf[Map[String, String]]
+    val propertyHash = propertySet.obj("properties").asInstanceOf[JSONObject].
+                                   obj.asInstanceOf[Map[String, String]]
     val baseHash = propertySet.obj.asInstanceOf[Map[String, String]]
 
     def prop(name: String): String = propertyHash(name)
@@ -40,7 +41,23 @@ package org.demiurgo.operalink {
     def rawIcon: String = prop("icon", "")
   }
 
-  class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet) with WithIcon {
+  trait FolderElement[BaseType] {
+    def childrenList: JSONArray
+    def prop(name: String, default: String): String
+
+    def folderType: String = prop("type", "")
+    def target: String = prop("target", "")
+    def isTrashFolder: Boolean = if (folderType == "trash") true else false
+    def isTargetFolder: Boolean = if (target == "") false else true
+    def contents: Seq[BaseType] = {
+      return for { entry <- childrenList.list.asInstanceOf[Seq[JSONObject]] }
+                 yield LinkAPIItem.fromJsonObject(entry).
+                                   asInstanceOf[BaseType]
+    }
+  }
+
+  class SpeedDialSlot(propertySet: JSONObject) extends LinkAPIItem(propertySet)
+                                               with WithIcon {
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def position: String = id
@@ -50,11 +67,13 @@ package org.demiurgo.operalink {
   }
 
 
-  abstract class BookmarkEntry(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+  abstract class BookmarkEntry(propertySet: JSONObject)
+           extends LinkAPIItem(propertySet) {
   }
 
 
-  class Bookmark(propertySet: JSONObject) extends BookmarkEntry(propertySet) with WithIcon {
+  class Bookmark(propertySet: JSONObject) extends BookmarkEntry(propertySet)
+                                          with WithIcon {
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
     def description: String = propertyHash("description")
@@ -64,30 +83,26 @@ package org.demiurgo.operalink {
   }
 
 
-  class BookmarkFolder(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
-    val childrenList = propertySet.obj("children").asInstanceOf[JSONArray].list.asInstanceOf[Seq[JSONObject]]
+  class BookmarkFolder(propertySet: JSONObject)
+        extends BookmarkEntry(propertySet) with FolderElement[BookmarkEntry] {
+    def childrenList: JSONArray = {
+      return propertySet.obj("children").asInstanceOf[JSONArray]
+    }
 
     def title: String = propertyHash("title")
     def description: String = propertyHash("description")
     def nickname: String = propertyHash("nickname")
-    def folderType: String = propertyHash.getOrElse("type", "")
-    def target: String = propertyHash.getOrElse("target", "")
     def created: String = propertyHash("created")
-
-    def isTrashFolder: Boolean = if (folderType == "trash") true else false
-    def isTargetFolder: Boolean = if (target == "") false else true
-    def contents: Seq[BookmarkEntry] = {
-      return for { entry <- childrenList }
-                 yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[BookmarkEntry]
-    }
   }
 
 
-  class BookmarkSeparator(propertySet: JSONObject) extends BookmarkEntry(propertySet) {
+  class BookmarkSeparator(propertySet: JSONObject)
+        extends BookmarkEntry(propertySet) {
   }
 
 
-  abstract class NoteEntry(propertySet: JSONObject) extends LinkAPIItem(propertySet) {
+  abstract class NoteEntry(propertySet: JSONObject)
+           extends LinkAPIItem(propertySet) {
   }
 
 
@@ -98,19 +113,13 @@ package org.demiurgo.operalink {
   }
 
 
-  class NoteFolder(propertySet: JSONObject) extends NoteEntry(propertySet) {
-    val childrenList = propertySet.obj("children").asInstanceOf[JSONArray].list.asInstanceOf[Seq[JSONObject]]
+  class NoteFolder(propertySet: JSONObject) extends NoteEntry(propertySet)
+                                            with FolderElement[NoteEntry] {
+    def childrenList: JSONArray = {
+      return propertySet.obj("children").asInstanceOf[JSONArray]
+    }
 
     def title: String = propertyHash("title")
-    def folderType: String = propertyHash.getOrElse("type", "")
-    def target: String = propertyHash.getOrElse("target", "")
-
-    def isTrashFolder: Boolean = if (folderType == "trash") true else false
-    def isTargetFolder: Boolean = if (target == "") false else true
-    def contents: Seq[NoteEntry] = {
-      return for { entry <- childrenList }
-                 yield LinkAPIItem.fromJsonObject(entry).asInstanceOf[NoteEntry]
-    }
   }
 
 
@@ -124,7 +133,8 @@ package org.demiurgo.operalink {
   }
 
 
-  class SearchEngine(propertySet: JSONObject) extends LinkAPIItem(propertySet) with WithIcon {
+  class SearchEngine(propertySet: JSONObject) extends LinkAPIItem(propertySet)
+                                              with WithIcon {
     def key: String = propertyHash("key")
     def title: String = propertyHash("title")
     def uri: String = propertyHash("uri")
