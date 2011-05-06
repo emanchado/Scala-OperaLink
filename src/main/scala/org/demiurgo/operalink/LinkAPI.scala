@@ -86,7 +86,8 @@ package org.demiurgo.operalink {
   class BookmarkFolder(propertySet: JSONObject)
         extends BookmarkEntry(propertySet) with FolderElement[BookmarkEntry] {
     def childrenList: JSONArray = {
-      return propertySet.obj("children").asInstanceOf[JSONArray]
+      return propertySet.obj.getOrElse("children", new JSONArray(List())).
+        asInstanceOf[JSONArray]
     }
 
     def title: String = propertyHash("title")
@@ -116,7 +117,8 @@ package org.demiurgo.operalink {
   class NoteFolder(propertySet: JSONObject) extends NoteEntry(propertySet)
                                             with FolderElement[NoteEntry] {
     def childrenList: JSONArray = {
-      return propertySet.obj("children").asInstanceOf[JSONArray]
+      return propertySet.obj.getOrElse("children", new JSONArray(List())).
+        asInstanceOf[JSONArray]
     }
 
     def title: String = propertyHash("title")

@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/note/abc789/",
+    "response": "[{\"item_type\": \"note_folder\", \"id\": \"abc789\", \"properties\": {\"title\": \"Empty folder\"}}]"
+  }
+]

@@ -257,6 +257,18 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
     trashFolder.isTrashFolder should equal(true)
   }
 
+  it should "correctly recognise an empty folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getBookmark-6")
+    val folder = api.getBookmark("E7355430508111E087A8D234149BB1CF").asInstanceOf[BookmarkFolder]
+    folder.id should equal("E7355430508111E087A8D234149BB1CF")
+    folder.title should equal("Opera")
+    folder.folderType should equal("")
+    folder.isTrashFolder should equal(false)
+    folder.contents.length should equal(0)
+  }
+
   it should "create a new bookmark properly" in {
     api.serverProxy = new TestLinkServerProxy(fakeConsumer,
                                               fakeAccessToken,
@@ -499,6 +511,15 @@ class LinkAPISpec extends FlatSpec with ShouldMatchers {
                                               "getNote-3")
     val note_separator = api.getNote("abc789").asInstanceOf[NoteSeparator]
     note_separator.id should equal("abc789")
+  }
+
+  it should "correctly recognise an empty note folder" in {
+    api.serverProxy = new TestLinkServerProxy(fakeConsumer,
+                                              fakeAccessToken,
+                                              "getNote-4")
+    val note_folder = api.getNote("abc789").asInstanceOf[NoteFolder]
+    note_folder.id should equal("abc789")
+    note_folder.contents.length should equal(0)
   }
 
   it should "create a new note properly" in {

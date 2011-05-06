@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get",
+    "path": "/rest/bookmark/E7355430508111E087A8D234149BB1CF/",
+    "response": "[{\"item_type\": \"bookmark_folder\", \"id\": \"E7355430508111E087A8D234149BB1CF\", \"properties\": {\"show_in_personal_bar\": false, \"show_in_panel\": false, \"title\": \"Opera\", \"personal_bar_pos\": -1, \"panel_pos\": -1}}]"
+  }
+]
