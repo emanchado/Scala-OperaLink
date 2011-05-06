@@ -32,7 +32,7 @@ package org.demiurgo.operalink {
         println(slot.position + " - " + slot.uri + " (" + slot.title + ")")
       }
 
-      api.updateSpeedDialSlot(6, Map[String, String]("title" -> "New title"))
+      // api.updateSpeedDialSlot(6, Map("title" -> "New title"))
     }
   }
 }
