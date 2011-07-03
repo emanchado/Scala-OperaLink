@@ -12,7 +12,7 @@ package org.demiurgo.operalink {
           mkString
     val fixtureSpec = JSON.parseRaw(fixtureSpecJSON).get.asInstanceOf[JSONArray]
 
-    def currentStepInfo: Map[Any, Any] = {
+    def currentStepInfo: Map[String, Any] = {
       return fixtureSpec.list(count - 1).asInstanceOf[JSONObject].obj
     }
 
