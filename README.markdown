@@ -21,3 +21,5 @@ compile it and run the tests, and you'll need these libraries to compile it:
 * [Apache Commons Codec](http://commons.apache.org/codec/)
 * [scalaj-http](https://github.com/scalaj/scalaj-http)
 * [ScalaTest](http://www.scalatest.org/) (this is only for running the tests, obviously)
+
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://github.com/emanchado/Scala-OperaLink&language=en_GB&tags=github&category=software)
