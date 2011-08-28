@@ -22,4 +22,4 @@ compile it and run the tests, and you'll need these libraries to compile it:
 * [scalaj-http](https://github.com/scalaj/scalaj-http)
 * [ScalaTest](http://www.scalatest.org/) (this is only for running the tests, obviously)
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://github.com/emanchado/Scala-OperaLink&language=en_GB&tags=github&category=software)
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=emanchado&url=https://github.com/emanchado/Scala-OperaLink&title=Scala Opera Link API client library&language=en_GB&tags=github&category=software)
