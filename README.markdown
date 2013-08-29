@@ -1,3 +1,19 @@
+DEPRECATED
+==========
+
+This library is deprecated. It probably doesn't work anymore on more recent versions of Scala anyway.
+
+
+
+
+
+
+
+
+
+
+
+
 Opera Link client library for Scala
 ===================================
 
